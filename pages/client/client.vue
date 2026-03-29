@@ -1,0 +1,119 @@
+<script setup>
+import { ref } from 'vue';
+
+const img = ref("")
+const show = ref(true)
+
+const chooseAvatar = () => {
+  wx.chooseImage({
+    count: 1,
+    sizeType: ['compressed'], 
+    sourceType: ['album', 'camera'],
+    success: (res) => {
+      img.value = res.tempFilePaths[0];
+	  show.value=false
+    },
+    fail: (err) => {
+      console.error("选择图片失败:", err);
+    }
+  });
+};
+</script>
+
+<template>
+	<view class="main">
+		<view class="layout">
+			<view class="profile">
+				<label for="icon" class="icon-set" @click="chooseAvatar" v-show="show">头像</label>
+				<image :src="img"></image>
+				<view class="name">用户名称</view>
+			</view>
+			<view class="buts">
+				<view class="buts-point">我的数据和报告</view>
+				<view class="buts-point">我的合约</view>
+				<view class="buts-point">我的货币</view>
+				<view class="buts-point">会员中心</view>
+				<view class="buts-point">帮助中心</view>
+				<view class="buts-point">设置</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<style scoped lang="scss">
+$background-light: #f5f5f5;
+$background-dark: #e0e0e0;
+page{
+	margin: 0;
+	padding: 0;
+}
+.main{
+	margin: 3rem 1rem;
+	padding: 0.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+}
+.layout{
+	background-color: $background-light;
+	width: 100%;
+	padding: 1rem 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+}
+.profile{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	gap: 1rem;
+	font-size: 1.5rem;
+	position: relative;
+	box-sizing: border-box;
+	.icon-set{
+		position: absolute;
+		top: 38%;
+		left:1.5rem;
+		z-index: 5;
+		font-size: 1rem;
+	}
+	image{
+		width: 5rem;
+		height: 5rem;
+		border-radius: 100%;
+		// background-color: $background-dark;
+		border:solid 1px $background-dark;
+	}
+}
+.buts{
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	margin-top: 1rem;
+	gap: 1.5rem;
+	justify-content: center;
+	align-items: flex-start;
+	width: 100%;
+	// background-color: $background-dark;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	.buts-point{
+		width: 100%;
+		background-color: lightgray;
+		padding: 0.7rem;
+		font-size: 1.2rem;
+		border-radius: 0.5rem;
+		box-sizing: border-box;
+		&:hover{
+			background-color: white;
+			transition:all;
+			transition-duration: 500ms;
+		}
+	}
+}
+</style>

@@ -1,0 +1,76 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "主页"
+			}
+		},
+		{
+			"path": "pages/calendar/calendar",
+			"style": {
+				"navigationBarTitleText": "日历"
+			}
+		},
+		{
+			"path": "pages/client/client",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/achivement/achivement",
+			"style": {
+				"navigationBarTitleText": "成就"
+			}
+		},
+		{
+			"path": "pages/task/task",
+			"style": {
+				"navigationBarTitleText": "试炼任务"
+			}
+		},
+		{
+			"path": "pages/plan/plan",
+			"style": {
+				"navigationBarTitleText": "计划"
+			}
+		},
+		{
+			"path": "pages/focus/focus",
+			"style": {
+				"navigationBarTitleText": "专注"
+			}
+		},
+		{
+			"path": "pages/today/today",
+			"style": {
+				"navigationBarTitleText": "今日计划"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {},
+	"tabBar": {
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/calendar/calendar",
+				"text": "日历"
+			},
+			{
+				"pagePath": "pages/client/client",
+				"text": "我的"
+			}
+		],
+		"fontSize": "15px"
+	}
+}

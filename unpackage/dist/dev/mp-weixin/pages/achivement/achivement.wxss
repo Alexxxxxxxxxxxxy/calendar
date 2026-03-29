@@ -1,0 +1,137 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+page.data-v-e3373947 {
+  margin: 0;
+  padding: 0;
+}
+.main.data-v-e3373947 {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+.achivement.data-v-e3373947 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.achivement .title.data-v-e3373947 {
+  background-color: #f5f5f5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 3rem;
+  box-sizing: border-box;
+}
+.achivement .wall.data-v-e3373947 {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 3rem;
+  position: relative;
+}
+.achivement .wall .left.data-v-e3373947, .achivement .wall .mid.data-v-e3373947, .achivement .wall .right.data-v-e3373947 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.achivement .wall .left .col.data-v-e3373947, .achivement .wall .mid .col.data-v-e3373947, .achivement .wall .right .col.data-v-e3373947 {
+  min-width: 3rem;
+  min-height: 5rem;
+  background-color: yellow;
+  border-radius: 0.6rem;
+  box-sizing: border-box;
+}
+.achivement .wall .left .bot.data-v-e3373947, .achivement .wall .mid .bot.data-v-e3373947, .achivement .wall .right .bot.data-v-e3373947 {
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+  padding: 0.2rem 0.8rem;
+  border-radius: 0.3rem;
+}
+.achivement .wall .mid.data-v-e3373947 {
+  position: absolute;
+  z-index: 5;
+  left: 40.5%;
+  bottom: -5%;
+}
+.achivement .wall .mid .col.data-v-e3373947 {
+  min-width: 4rem;
+  min-height: 10rem;
+}
+.achivement .wall .mid .bot.data-v-e3373947 {
+  font-size: 1.2rem;
+}
+.honor.data-v-e3373947 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.honor .title.data-v-e3373947 {
+  background-color: #f5f5f5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-bottom: 3rem;
+  box-sizing: border-box;
+}
+.honor .place.data-v-e3373947 {
+  width: 100%;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rem;
+  box-sizing: border-box;
+  justify-content: space-around;
+  align-items: center;
+}
+.honor .place .item.data-v-e3373947 {
+  box-sizing: border-box;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  transform: rotate(45deg);
+}
+.honor .place .item text.data-v-e3373947 {
+  transform: rotate(-45deg);
+}

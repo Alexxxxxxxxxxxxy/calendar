@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "日历",
+  "usingComponents": {
+    "progress": "../../components/Progress",
+    "new-class": "../../components/NewClass"
+  }
+}
