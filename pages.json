@@ -19,7 +19,7 @@
 			}
 		},
 		{
-			"path": "pages/achivement/achivement",
+			"path": "pages/achievement/achievement",
 			"style": {
 				"navigationBarTitleText": "成就"
 			}

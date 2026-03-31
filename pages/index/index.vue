@@ -11,7 +11,7 @@ const progress = ref(50)
 
 const achiveJump = ()=>{
 	uni.navigateTo({
-		url:"/pages/achivement/achivement",
+		url:"/pages/achievement/achievement",
 	})
 }
 

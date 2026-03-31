@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, ssrContextKey } from 'vue';
 
 // 模拟顶部数据
 const subjectInfo = ref({
@@ -7,8 +7,58 @@ const subjectInfo = ref({
   duration: "总时长: 2h"
 });
 
-// 模拟计时器数据
-const timerDisplay = ref("00:50:47");
+// 配置
+const TOTAL_SECONDS = ref(1 * 60 * 60) // 1小时
+
+// 状态
+const left_time = ref(TOTAL_SECONDS.value) // 剩余秒数（核心！）
+const paused = ref(true)
+let timer = null
+
+// 时间格式化（完全不变）
+const timerDisplay = computed(() => {
+  let left = left_time.value
+  if (isNaN(left) || left < 0) left = 0
+
+  const h = Math.floor(left / 3600)
+  const m = Math.floor((left % 3600) / 60)
+  const s = Math.floor(left % 60)
+
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+})
+
+// 开始 / 继续
+const start = () => {
+  if (timer) return // 正在运行，不重复启动
+  paused.value = false
+  timer = setInterval(() => {
+    if (left_time.value <= 0) {
+      clearInterval(timer)
+      timer = null
+      paused.value = true
+      return
+    }
+    left_time.value -= 1
+  }, 1000)
+}
+
+// 暂停
+const pause = () => {
+  if (!timer) return
+  clearInterval(timer)
+  timer = null
+  paused.value = true
+}
+
+// 点击开关
+const handleClick = () => {
+  if (paused.value) {
+    start()
+  } else {
+    pause()
+  }
+}
+// const timerDisplay = ref("00:50:47");
 
 // 模拟底部按钮状态
 const statusText = ref("状态");
@@ -25,7 +75,7 @@ const statusText = ref("状态");
     </view>
 
     <!-- 2. 中间核心计时器 -->
-    <view class="timer-section">
+    <view class="timer-section" @click="handleClick">
       <view class="timer-circle">
         <view class="timer-label">计时器</view>
         <view class="timer-number">{{ timerDisplay }}</view>

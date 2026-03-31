@@ -5,7 +5,7 @@ if (!Math) {
   "./pages/index/index.js";
   "./pages/calendar/calendar.js";
   "./pages/client/client.js";
-  "./pages/achivement/achivement.js";
+  "./pages/achievement/achievement.js";
   "./pages/task/task.js";
   "./pages/plan/plan.js";
   "./pages/focus/focus.js";

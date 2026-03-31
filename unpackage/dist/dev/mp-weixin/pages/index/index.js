@@ -13,7 +13,7 @@ const _sfc_main = {
     const progress = common_vendor.ref(50);
     const achiveJump = () => {
       common_vendor.index.navigateTo({
-        url: "/pages/achivement/achivement"
+        url: "/pages/achievement/achievement"
       });
     };
     const taskJump = () => {

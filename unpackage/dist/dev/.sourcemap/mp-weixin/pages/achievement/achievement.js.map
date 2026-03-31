@@ -1,0 +1,1 @@
+{"version":3,"file":"achievement.js","sources":["../../../HBuilderX/HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvYWNoaWV2ZW1lbnQvYWNoaWV2ZW1lbnQudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/code/uniapp/calendar/pages/achievement/achievement.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}
