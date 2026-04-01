@@ -8,7 +8,8 @@ const Progress = () => "../../components/Progress.js";
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const img = common_vendor.ref(common_assets.client);
+    const img = common_vendor.ref(common_assets.user);
+    const coin = common_vendor.ref(common_assets.coinImg);
     const currency = common_vendor.ref(0);
     const progress = common_vendor.ref(50);
     const achiveJump = () => {
@@ -29,7 +30,7 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return {
         a: img.value,
-        b: common_vendor.unref(common_assets.coin),
+        b: coin.value,
         c: common_vendor.t(currency.value),
         d: common_vendor.p({
           width: progress.value + "%"

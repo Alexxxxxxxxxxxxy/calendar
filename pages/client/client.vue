@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import user from "../../public/client-o.png"
 
-const img = ref("")
+const img = ref(null)
 const show = ref(true)
 
 const chooseAvatar = () => {
@@ -24,8 +25,9 @@ const chooseAvatar = () => {
 	<view class="main">
 		<view class="layout">
 			<view class="profile">
-				<label for="icon" class="icon-set" @click="chooseAvatar" v-show="show">头像</label>
-				<image :src="img"></image>
+				<label for="icon" class="icon-set" @click="chooseAvatar">
+					<image :src="img?img:user"></image>
+				</label>
 				<view class="name">用户名称</view>
 			</view>
 			<view class="buts">
@@ -76,7 +78,6 @@ page{
 	position: relative;
 	box-sizing: border-box;
 	.icon-set{
-		position: absolute;
 		top: 38%;
 		left:1.5rem;
 		z-index: 5;

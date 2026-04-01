@@ -57,7 +57,6 @@ page.data-v-394faf7f {
   box-sizing: border-box;
 }
 .profile .icon-set.data-v-394faf7f {
-  position: absolute;
   top: 38%;
   left: 1.5rem;
   z-index: 5;

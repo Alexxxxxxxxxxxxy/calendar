@@ -1,9 +1,10 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   __name: "client",
   setup(__props) {
-    const img = common_vendor.ref("");
+    const img = common_vendor.ref(null);
     const show = common_vendor.ref(true);
     const chooseAvatar = () => {
       common_vendor.wx$1.chooseImage({
@@ -15,15 +16,14 @@ const _sfc_main = {
           show.value = false;
         },
         fail: (err) => {
-          common_vendor.index.__f__("error", "at pages/client/client.vue:17", "选择图片失败:", err);
+          common_vendor.index.__f__("error", "at pages/client/client.vue:18", "选择图片失败:", err);
         }
       });
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.o(chooseAvatar),
-        b: show.value,
-        c: img.value
+        a: img.value ? img.value : common_vendor.unref(common_assets.user),
+        b: common_vendor.o(chooseAvatar)
       };
     };
   }
