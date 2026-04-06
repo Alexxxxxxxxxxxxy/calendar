@@ -7,7 +7,11 @@
     "pages/task/task",
     "pages/plan/plan",
     "pages/focus/focus",
-    "pages/today/today"
+    "pages/today/today",
+    "pages/contract/contract",
+    "pages/skill/skill",
+    "pages/remit/remit",
+    "pages/emotion/emotion"
   ],
   "window": {
     "navigationBarTextStyle": "black",

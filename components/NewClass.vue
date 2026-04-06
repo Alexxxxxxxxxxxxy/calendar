@@ -48,6 +48,19 @@ const handleSubmit = ()=>{
 		});
 		return;
 	}
+	else{
+		let result = testTime.value.split(",")
+		console.log(result)
+		if(result.length!==3 || result[0].length<4 || result[1].length!==2 || result[2].length!==2){
+			uni.showModal({
+				title: '错误请求',
+				content: '考试时间格式不正确！(YYYY-MM-DD)',
+				showCancel:false,
+			});
+			return;
+		}
+	}
+	
 	if(!targetScore.value){
 		uni.showModal({
 			title: '错误请求',
@@ -84,6 +97,7 @@ const handleAdd = ()=>{
 		return;
 	}
 	knowledges.value.push(knowledge.value)
+	knowledge.value = ""
 }
 
 const emit = defineEmits(["close"])
@@ -115,7 +129,7 @@ const handleX = ()=>{
 			</view>
 			<view class="date">
 				<label for="date">考试日期：</label>
-				<input type="text" placeholder="1.11" id="date" name="date" placeholder-class="date-holder" v-model="testTime"/>
+				<input type="text" placeholder="2026.1.11" id="date" name="date" placeholder-class="date-holder" v-model="testTime"/>
 			</view>
 			<view class="score">
 				<label for="score">目标分数：</label>

@@ -1,0 +1,1 @@
+{"version":3,"file":"contract.js","sources":["../../../HBuilderX/HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvY29udHJhY3QvY29udHJhY3QudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/code/uniapp/calendar/pages/contract/contract.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;AACA,GAAG,WAAW,eAAe;"}

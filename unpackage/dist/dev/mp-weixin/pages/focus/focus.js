@@ -49,13 +49,31 @@ const _sfc_main = {
       }
     };
     const statusText = common_vendor.ref("状态");
+    const skillJump = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/skill/skill"
+      });
+    };
+    const remitJump = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/remit/remit"
+      });
+    };
+    const emotionJump = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/emotion/emotion"
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: common_vendor.t(subjectInfo.value.title),
         b: common_vendor.t(subjectInfo.value.duration),
         c: common_vendor.t(timerDisplay.value),
         d: common_vendor.o(handleClick),
-        e: common_vendor.t(statusText.value)
+        e: common_vendor.t(statusText.value),
+        f: common_vendor.o(remitJump),
+        g: common_vendor.o(emotionJump),
+        h: common_vendor.o(skillJump)
       };
     };
   }

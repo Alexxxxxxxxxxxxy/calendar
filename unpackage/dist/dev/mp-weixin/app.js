@@ -10,6 +10,10 @@ if (!Math) {
   "./pages/plan/plan.js";
   "./pages/focus/focus.js";
   "./pages/today/today.js";
+  "./pages/contract/contract.js";
+  "./pages/skill/skill.js";
+  "./pages/remit/remit.js";
+  "./pages/emotion/emotion.js";
 }
 const _sfc_main = {
   onLaunch: function() {

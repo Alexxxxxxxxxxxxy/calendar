@@ -47,6 +47,30 @@
 			"style": {
 				"navigationBarTitleText": "今日计划"
 			}
+		},
+		{
+			"path": "pages/contract/contract",
+			"style": {
+				"navigationBarTitleText": "合约"
+			}
+		},
+		{
+			"path": "pages/skill/skill",
+			"style": {
+				"navigationBarTitleText": "技能卡"
+			}
+		},
+		{
+			"path": "pages/remit/remit",
+			"style": {
+				"navigationBarTitleText": "豁免"
+			}
+		},
+		{
+			"path": "pages/emotion/emotion",
+			"style": {
+				"navigationBarTitleText": "情绪"
+			}
 		}
 	],
 	"globalStyle": {

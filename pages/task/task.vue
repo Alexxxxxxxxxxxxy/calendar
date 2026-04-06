@@ -131,7 +131,7 @@ page{
 	align-items: center;
 	padding: 0.5rem 0;
 	background-color: $background-dark;
-	border-radius: 0.5rem;
+	border-radius: 0.5rem 0.5rem 0 0;
 	box-sizing: border-box;
 }
 .body{

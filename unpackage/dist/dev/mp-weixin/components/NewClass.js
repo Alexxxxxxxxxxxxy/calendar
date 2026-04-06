@@ -45,6 +45,17 @@ const _sfc_main = {
           showCancel: false
         });
         return;
+      } else {
+        let result = testTime.value.split(",");
+        common_vendor.index.__f__("log", "at components/NewClass.vue:53", result);
+        if (result.length !== 3 || result[0].length < 4 || result[1].length !== 2 || result[2].length !== 2) {
+          common_vendor.index.showModal({
+            title: "错误请求",
+            content: "考试时间格式不正确！(YYYY-MM-DD)",
+            showCancel: false
+          });
+          return;
+        }
       }
       if (!targetScore.value) {
         common_vendor.index.showModal({
@@ -81,6 +92,7 @@ const _sfc_main = {
         return;
       }
       knowledges.value.push(knowledge.value);
+      knowledge.value = "";
     };
     const emit = __emit;
     const handleX = () => {

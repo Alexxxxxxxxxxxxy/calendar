@@ -27,6 +27,18 @@ const todayJump = () => {
     url: "/pages/today/today"
   })
 }
+
+const contractJump = ()=>{
+	uni.navigateTo({
+		url:"/pages/contract/contract"
+	})
+}
+
+const skillJump = ()=>{
+	uni.navigateTo({
+		url:"/pages/skill/skill"
+	})
+}
 </script>
 
 <template>
@@ -39,7 +51,7 @@ const todayJump = () => {
       </view>
     </view>
     
-    <view class="agree">
+    <view class="agree" @click="contractJump">
       <text>合约进度：</text>
       <view style="margin: 1rem 0;"><Progress :width="progress+'%'"></Progress></view>
       <text>已完成50%</text>
@@ -57,7 +69,7 @@ const todayJump = () => {
       </view>
       <view class="skill">
         <view class="skill-point" @click="achiveJump">成就</view>
-        <view class="skill-point">技能卡</view>
+        <view class="skill-point" @click="skillJump">技能卡</view>
       </view>
     </view>
   </view>

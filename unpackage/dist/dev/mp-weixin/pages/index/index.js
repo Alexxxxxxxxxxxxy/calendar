@@ -27,6 +27,16 @@ const _sfc_main = {
         url: "/pages/today/today"
       });
     };
+    const contractJump = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/contract/contract"
+      });
+    };
+    const skillJump = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/skill/skill"
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: img.value,
@@ -35,9 +45,11 @@ const _sfc_main = {
         d: common_vendor.p({
           width: progress.value + "%"
         }),
-        e: common_vendor.o(taskJump),
-        f: common_vendor.o(todayJump),
-        g: common_vendor.o(achiveJump)
+        e: common_vendor.o(contractJump),
+        f: common_vendor.o(taskJump),
+        g: common_vendor.o(todayJump),
+        h: common_vendor.o(achiveJump),
+        i: common_vendor.o(skillJump)
       };
     };
   }

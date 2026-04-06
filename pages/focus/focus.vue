@@ -58,10 +58,28 @@ const handleClick = () => {
     pause()
   }
 }
-// const timerDisplay = ref("00:50:47");
+
 
 // 模拟底部按钮状态
 const statusText = ref("状态");
+
+const skillJump = ()=>{
+	uni.navigateTo({
+		url:"/pages/skill/skill"
+	})
+}
+
+const remitJump = ()=>{
+	uni.navigateTo({
+		url:"/pages/remit/remit"
+	})
+}
+
+const emotionJump = ()=>{
+	uni.navigateTo({
+		url:"/pages/emotion/emotion"
+	})
+}
 </script>
 
 <template>
@@ -86,17 +104,17 @@ const statusText = ref("状态");
     <view class="bottom-actions">
       <!-- 左侧状态 -->
       <view class="status-group">
-        <view style="display: flex;align-items: center; gap: 5rpx;">
+        <view style="display: flex;align-items: center; gap: 30rpx;">
           <view class="status-tag">{{ statusText }}</view>
-          <view class="status-icon">!</view>
+          <view class="status-icon" @click="remitJump">!</view>
         </view>
         <view class="status-tag">返回</view>
       </view>
 
       <!-- 右侧按钮组 -->
       <view class="button-group">
-        <view class="action-btn">情绪反馈</view>
-        <view class="action-btn">技能卡</view>
+        <view class="action-btn" @click="emotionJump">情绪反馈</view>
+        <view class="action-btn" @click="skillJump">技能卡</view>
         <view class="action-btn">确认完成</view>
       </view>
     </view>

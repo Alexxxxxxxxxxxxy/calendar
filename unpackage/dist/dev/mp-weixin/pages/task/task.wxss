@@ -43,7 +43,7 @@ page.data-v-62407536 {
   align-items: center;
   padding: 0.5rem 0;
   background-color: #e0e0e0;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem 0.5rem 0 0;
   box-sizing: border-box;
 }
 .body.data-v-62407536 {

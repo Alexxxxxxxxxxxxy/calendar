@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "技能卡",
+  "usingComponents": {
+    "skill-car": "../../components/SkillCar"
+  }
+}
