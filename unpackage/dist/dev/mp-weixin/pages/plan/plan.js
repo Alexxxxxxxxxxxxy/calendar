@@ -1,8 +1,11 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "plan",
   setup(__props) {
+    const { continuous_day } = context_userContext.useUserContext();
+    const continuous = common_vendor.ref(continuous_day || 0);
     const tasks = common_vendor.ref([
       {
         id: 1,
@@ -30,8 +33,9 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.o(focusJump),
-        b: common_vendor.f(tasks.value, (task, k0, i0) => {
+        a: common_vendor.t(continuous.value),
+        b: common_vendor.o(focusJump),
+        c: common_vendor.f(tasks.value, (task, k0, i0) => {
           return common_vendor.e({
             a: common_vendor.t(task.title),
             b: task.status

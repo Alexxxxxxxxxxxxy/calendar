@@ -2,6 +2,7 @@
 import start_gray from "../../public/start.png"
 import start_yellow from "../../public/start-yellow.png"
 import { computed, ref } from 'vue';
+import {onLoad} from "@dcloudio/uni-app"
 
 const t = ref(0);
 const starts = Array.from({length: 5}, (_, i) => ({id: i}));
@@ -63,6 +64,48 @@ const timeStr = computed(()=>{
   return `${hh}:${mm}:${ss}`;
 })
 
+const subject = ref("")
+const task = ref("")
+const taskid = ref("")
+// 网络请求
+onLoad(()=>{
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	})
+	uni.request({
+		url:"http://106.53.182.241:8000/api/task/trial",
+		method:"GET",
+		header:{
+			"Content-Type": "application/json",
+		},
+		success:(res)=>{
+			console.log(res.data.data)
+			if(res.statusCode !== 200){
+				uni.showToast({
+				  title: `接口异常 ${res.statusCode}`,
+				  icon: "none", 
+				  duration: 2000
+				})
+				return
+			}
+			subject.value = res.data.data.subject_name
+			task.value = res.data.data.sub_knowledge
+			taskid.value = res.data.data.task_id
+		},
+		fail:(err)=>{
+			uni.showToast({
+			  title: err.errMsg || "网络请求失败",
+			  icon: "none", 
+			  duration: 2000
+			})
+		},
+		complete:()=>{
+			uni.hideLoading()
+		}
+	})
+})
+
 const planJump = ()=>{
 	uni.navigateTo({
 		url:"/pages/plan/plan"
@@ -76,10 +119,12 @@ const planJump = ()=>{
 		</view>
 		<view class="body">
 			<view class="title">
-				<view class="project">高等数学</view>
+				<view class="project">{{subject}}</view>
 				<view class="time">{{timeStr}}</view>
 			</view>
-			<view class="tasks">&emsp;</view>
+			<view class="tasks">
+				<text>{{task}}</text>
+			</view>
 			<button size="mini" class="start" @click="handleClick">{{text}}</button>
 		</view>
 		<view class="other">
@@ -160,6 +205,10 @@ page{
 		width: 80%;
 		min-height: 5rem;
 		background-color: $background-dark;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 		box-sizing: border-box;
 	}
 	.start{

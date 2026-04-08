@@ -54,6 +54,46 @@ const _sfc_main = {
       let ss = s.value < 10 ? "0" + s.value : s.value;
       return `${hh}:${mm}:${ss}`;
     });
+    const subject = common_vendor.ref("");
+    const task = common_vendor.ref("");
+    const taskid = common_vendor.ref("");
+    common_vendor.onLoad(() => {
+      common_vendor.index.showLoading({
+        title: "加载中...",
+        mask: true
+      });
+      common_vendor.index.request({
+        url: "http://106.53.182.241:8000/api/task/trial",
+        method: "GET",
+        header: {
+          "Content-Type": "application/json"
+        },
+        success: (res) => {
+          common_vendor.index.__f__("log", "at pages/task/task.vue:83", res.data.data);
+          if (res.statusCode !== 200) {
+            common_vendor.index.showToast({
+              title: `接口异常 ${res.statusCode}`,
+              icon: "none",
+              duration: 2e3
+            });
+            return;
+          }
+          subject.value = res.data.data.subject_name;
+          task.value = res.data.data.sub_knowledge;
+          taskid.value = res.data.data.task_id;
+        },
+        fail: (err) => {
+          common_vendor.index.showToast({
+            title: err.errMsg || "网络请求失败",
+            icon: "none",
+            duration: 2e3
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
+        }
+      });
+    });
     const planJump = () => {
       common_vendor.index.navigateTo({
         url: "/pages/plan/plan"
@@ -61,24 +101,26 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(timeStr.value),
-        b: common_vendor.t(text.value),
-        c: common_vendor.o(handleClick),
-        d: common_vendor.f(common_vendor.unref(starts), (start, index, i0) => {
+        a: common_vendor.t(subject.value),
+        b: common_vendor.t(timeStr.value),
+        c: common_vendor.t(task.value),
+        d: common_vendor.t(text.value),
+        e: common_vendor.o(handleClick),
+        f: common_vendor.f(common_vendor.unref(starts), (start, index, i0) => {
           return {
             a: common_vendor.o(($event) => handleStartClick(index), index),
             b: index,
             c: index >= t.value ? common_vendor.unref(common_assets.start_gray) : common_vendor.unref(common_assets.start_yellow)
           };
         }),
-        e: common_vendor.f(common_vendor.unref(points), (point, index, i0) => {
+        g: common_vendor.f(common_vendor.unref(points), (point, index, i0) => {
           return {
             a: common_vendor.o(($event) => handlePointClick(index), index),
             b: index,
             c: index < n.value ? 1 : ""
           };
         }),
-        f: common_vendor.o(planJump)
+        h: common_vendor.o(planJump)
       };
     };
   }

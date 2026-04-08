@@ -69,6 +69,10 @@ page.data-v-62407536 {
   width: 80%;
   min-height: 5rem;
   background-color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
 }
 .body .start.data-v-62407536 {

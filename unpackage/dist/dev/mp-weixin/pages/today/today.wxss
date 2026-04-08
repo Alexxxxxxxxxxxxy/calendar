@@ -28,6 +28,10 @@ page.data-v-9c3a1a54 {
   padding: 20rpx;
   box-sizing: border-box;
 }
+.container.data-v-9c3a1a54 {
+  margin: 0.5rem;
+  box-sizing: border-box;
+}
 .progress-section.data-v-9c3a1a54 {
   margin-bottom: 30rpx;
 }
@@ -64,7 +68,7 @@ page.data-v-9c3a1a54 {
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0rpx 10rpx 10rpx rgba(0, 0, 0, 0.5);
 }
 .task-list .task-card.data-v-9c3a1a54:last-child {
   margin-bottom: 0;
@@ -88,10 +92,16 @@ page.data-v-9c3a1a54 {
 }
 .task-list .subtask-item.data-v-9c3a1a54 {
   width: 100%;
-  height: 40rpx;
+  height: 60rpx;
   background-color: #e0e0e0;
   border-radius: 20rpx;
   margin-bottom: 15rpx;
+  padding: 0.2rem 0.8rem;
+  font-size: 30rpx;
+  display: flex;
+  justify-items: flex-start;
+  align-items: center;
+  box-sizing: border-box;
 }
 .task-list .subtask-item.data-v-9c3a1a54:last-child {
   margin-bottom: 0;

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
+const context_userContext = require("./context/userContext.js");
 if (!Math) {
   "./pages/index/index.js";
   "./pages/calendar/calendar.js";
@@ -16,14 +17,11 @@ if (!Math) {
   "./pages/emotion/emotion.js";
 }
 const _sfc_main = {
-  onLaunch: function() {
-    common_vendor.index.__f__("log", "at App.vue:4", "App Launch");
-  },
-  onShow: function() {
-    common_vendor.index.__f__("log", "at App.vue:7", "App Show");
-  },
-  onHide: function() {
-    common_vendor.index.__f__("log", "at App.vue:10", "App Hide");
+  __name: "App",
+  setup(__props) {
+    context_userContext.useUserContextProvider();
+    return () => {
+    };
   }
 };
 function createApp() {

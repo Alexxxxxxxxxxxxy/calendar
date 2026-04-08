@@ -1,25 +1,63 @@
 <script setup>
 import { ref } from 'vue';
+import {onLoad} from "@dcloudio/uni-app"
+import { useUserContext } from '../../context/userContext';
 
-const progress = ref(33);
+const {progress} = useUserContext()
+
+const Progress = ref(progress);
 
 const tasks = ref([
-  {
-    id: 1,
-    title: '高等数学',
-    items: ['知识点1', '知识点2', '知识点3']
-  },
-  {
-    id: 2,
-    title: '程序设计',
-    items: ['任务A', '任务B', '任务C', '任务D']
-  }
 ]);
 
 const stats = ref({
   count: 2,
   totalHours: '4h'
 });
+
+// 网络请求
+onLoad(()=>{
+	uni.showLoading({
+		title:"加载中...",
+		mask:true
+	})
+	uni.request({
+		url:"http://106.53.182.241:8000/api/today/list",
+		method:'GET',
+		header:{
+			"Content-Type": "application/json",
+		},
+		success:(res)=>{
+			if(res.statusCode !=200){
+				uni.showToast({
+				  title: `接口异常 ${res.statusCode}`,
+				  icon: "none", 
+				  duration: 2000
+				})
+				return
+			}
+			stats.value.totalHours = res.data.data.total_required_minutes/60 +"h"
+			stats.value.count = res.data.data.total_subjects
+			res.data.data.subjects.forEach((content)=>{
+				tasks.value.push({
+					id:tasks.value.length+1,
+					title:content.subject_name,
+					items:content.today_tasks
+				})
+			})
+		},
+		fail:(err)=>{
+			uni.showToast({
+			  title: err.errMsg || "网络请求失败",
+			  icon: "none", 
+			  duration: 2000
+			})
+		},
+		complete:()=>{
+			uni.hideLoading()
+		}
+	})
+})
 </script>
 
 <template>
@@ -27,7 +65,7 @@ const stats = ref({
     <view class="progress-section">
       <view class="section-title">今日计划</view>
       <view class="progress-bar">
-        <view class="progress-fill" :style="{ width: progress + '%' }"></view>
+        <view class="progress-fill" :style="{ width: Progress + '%' }"></view>
       </view>
     </view>
 
@@ -38,7 +76,9 @@ const stats = ref({
           <text class="task-title">{{ task.title }}</text>
         </view>
         <view class="subtask-list">
-          <view class="subtask-item" v-for="(item, index) in task.items" :key="index"></view>
+          <view class="subtask-item" v-for="(item, index) in task.items" :key="index">
+			<text>{{item}}</text>
+		  </view>
         </view>
       </view>
     </view>
@@ -60,6 +100,10 @@ page {
   background-color: $bg-color;
   padding: 20rpx;
   box-sizing: border-box;
+}
+.container{
+	margin: 0.5rem;
+	box-sizing: border-box;
 }
 
 .progress-section {
@@ -98,7 +142,7 @@ page {
     border-radius: 20rpx;
     padding: 30rpx;
     margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.05);
+    box-shadow: 0rpx 10rpx 10rpx rgba(0,0,0,0.5);
     &:last-child {
       margin-bottom: 0;
     }
@@ -122,10 +166,16 @@ page {
   }
   .subtask-item {
     width: 100%;
-    height: 40rpx;
+    height: 60rpx;
     background-color: $gray-color;
     border-radius: 20rpx;
     margin-bottom: 15rpx;
+	padding: 0.2rem 0.8rem;
+	font-size: 30rpx;
+	display: flex;
+	justify-items: flex-start;
+	align-items: center;
+	box-sizing: border-box;
     &:last-child {
       margin-bottom: 0;
     }

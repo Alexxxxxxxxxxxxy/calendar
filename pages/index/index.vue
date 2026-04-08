@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import {onLoad} from "@dcloudio/uni-app"
+import { useUserContext } from '../../context/userContext';
+
 import Progress from "@/components/Progress.vue"
 
 import clientImg from "../../public/client-o.png"
@@ -7,8 +10,51 @@ import coinImg from "../../public/Coin.png"
 
 const img = ref(clientImg)
 const coin = ref(coinImg)
+const continuousDay = ref(0)
 const currency = ref(0)
 const progress = ref(50)
+const {continuous_day, updateContinuousDay, updateProgress} = useUserContext()
+
+onLoad(() => {
+
+  uni.showLoading({
+    title: '加载中...',
+    mask: true
+  })
+
+  uni.request({
+    url: "http://106.53.182.241:8000/api/index/home_data",
+    method: 'GET',
+    header: {
+      "Content-Type": "application/json",
+    },
+    success: (res) => {
+      if (res.statusCode !== 200) {
+        uni.showToast({
+          title: `接口异常 ${res.statusCode}`,
+          icon: "none", 
+          duration: 2000
+        })
+        return
+      }
+	  currency.value = res.data.data.coin_balance
+	  progress.value = Math.floor(res.data.data.completion_rate*100)
+	  continuousDay.value = res.data.data.continuous_days
+	  updateContinuousDay(res.data.data.continuous_days)
+	  updateProgress(Math.floor(res.data.data.completion_rate*100))
+    },
+    fail: (err) => {
+      uni.showToast({
+        title: err.errMsg || "网络请求失败",
+        icon: "none", 
+        duration: 2000
+      })
+    },
+    complete: () => {
+      uni.hideLoading()
+    }
+  })
+})
 
 const achiveJump = () => {
   uni.navigateTo({
@@ -54,11 +100,11 @@ const skillJump = ()=>{
     <view class="agree" @click="contractJump">
       <text>合约进度：</text>
       <view style="margin: 1rem 0;"><Progress :width="progress+'%'"></Progress></view>
-      <text>已完成50%</text>
+      <text>已完成{{progress}}%</text>
     </view>
     
     <view class="plan" @click="taskJump">
-      <text>坚持第N天</text>
+      <text>坚持第{{continuousDay}}天</text>
       <text>开始今日计划</text>
     </view>
     

@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import { useUserContext } from '../../context/userContext';
+const {continuous_day} = useUserContext()
+
+const continuous = ref(continuous_day || 0)
 
 // 模拟任务数据
 const tasks = ref([
@@ -34,7 +38,7 @@ const focusJump = ()=>{
   <view class="container">
     <view class="status-section">
       <view class="status-tag">状态</view>
-      <view class="streak-tag">坚持 第 N 天</view>
+      <view class="streak-tag">坚持 第 {{continuous}} 天</view>
     </view>
 
     <view class="timer-card">

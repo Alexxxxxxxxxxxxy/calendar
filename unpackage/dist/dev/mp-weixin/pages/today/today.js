@@ -1,34 +1,68 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "today",
   setup(__props) {
-    const progress = common_vendor.ref(33);
-    const tasks = common_vendor.ref([
-      {
-        id: 1,
-        title: "高等数学",
-        items: ["知识点1", "知识点2", "知识点3"]
-      },
-      {
-        id: 2,
-        title: "程序设计",
-        items: ["任务A", "任务B", "任务C", "任务D"]
-      }
-    ]);
+    const { progress } = context_userContext.useUserContext();
+    const Progress = common_vendor.ref(progress);
+    const tasks = common_vendor.ref([]);
     const stats = common_vendor.ref({
       count: 2,
       totalHours: "4h"
     });
+    common_vendor.onLoad(() => {
+      common_vendor.index.showLoading({
+        title: "加载中...",
+        mask: true
+      });
+      common_vendor.index.request({
+        url: "http://106.53.182.241:8000/api/today/list",
+        method: "GET",
+        header: {
+          "Content-Type": "application/json"
+        },
+        success: (res) => {
+          if (res.statusCode != 200) {
+            common_vendor.index.showToast({
+              title: `接口异常 ${res.statusCode}`,
+              icon: "none",
+              duration: 2e3
+            });
+            return;
+          }
+          stats.value.totalHours = res.data.data.total_required_minutes / 60 + "h";
+          stats.value.count = res.data.data.total_subjects;
+          res.data.data.subjects.forEach((content) => {
+            tasks.value.push({
+              id: tasks.value.length + 1,
+              title: content.subject_name,
+              items: content.today_tasks
+            });
+          });
+        },
+        fail: (err) => {
+          common_vendor.index.showToast({
+            title: err.errMsg || "网络请求失败",
+            icon: "none",
+            duration: 2e3
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
+        }
+      });
+    });
     return (_ctx, _cache) => {
       return {
-        a: progress.value + "%",
+        a: Progress.value + "%",
         b: common_vendor.f(tasks.value, (task, k0, i0) => {
           return {
             a: common_vendor.t(task.title),
             b: common_vendor.f(task.items, (item, index, i1) => {
               return {
-                a: index
+                a: common_vendor.t(item),
+                b: index
               };
             }),
             c: task.id

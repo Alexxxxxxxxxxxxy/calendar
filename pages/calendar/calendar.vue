@@ -3,9 +3,17 @@ import { ref } from 'vue';
 
 import Progress from "@/components/Progress.vue"
 import NewClass from "@/components/NewClass.vue"
-import {onHide} from "@dcloudio/uni-app"
-const progress = ref(50)
+import {onHide,onLoad} from "@dcloudio/uni-app"
+import { useUserContext } from '../../context/userContext';
+
+const {continuous_day, progress} = useUserContext()
+
+const continuous = ref(continuous_day)
+const ProGress = ref(progress)
 const show = ref(false)
+const study = ref(0)
+const completeTask = ref(0)
+const rate = ref(0)
 
 onHide(()=>{
 	show.value = false
@@ -16,6 +24,48 @@ const year = date.getFullYear()
 const month = date.getMonth()+1
 const day = date.getDate()
 
+// 网络请求
+onLoad(() => {
+
+  uni.showLoading({
+    title: '加载中...',
+    mask: true
+  })
+
+  uni.request({
+    url: "http://106.53.182.241:8000/api/calendar/daily",
+    method: 'GET',
+    header: {
+      "Content-Type": "application/json",
+    },
+	data:{
+		date: `${year}/${month}/${day}`
+	},
+    success: (res) => {
+      if (res.statusCode !== 200) {
+        uni.showToast({
+          title: `接口异常 ${res.statusCode}`,
+          icon: "none", 
+          duration: 2000
+        })
+        return
+      }
+	  study.value = res.data.data.study_duration/60
+	  completeTask.value = res.data.data.completed_tasks
+	  rate.value = res.data.data.completion_rate*100
+    },
+    fail: (err) => {
+      uni.showToast({
+        title: err.errMsg || "网络请求失败",
+        icon: "none", 
+        duration: 2000
+      })
+    },
+    complete: () => {
+      uni.hideLoading()
+    }
+  })
+})
 
 const handleClick = ()=>{
 	show.value = !show.value
@@ -33,7 +83,7 @@ const handleClose = ()=>{
 	</view>
 	<view class="main">
 		<view class="header">
-			<view class="title">连续打卡N天</view>
+			<view class="title">连续打卡{{continuous}}天</view>
 			<view class="add" @click="handleClick">+</view>
 		</view>
 		<view class="calendar">
@@ -43,14 +93,14 @@ const handleClose = ()=>{
 			<view class="date">
 				{{year}}年{{month}}月{{day}}日
 			</view>
-			<view class="info">学习时长：</view>
-			<view class="info">完成任务：</view>
-			<view class="info">完成率：</view>
+			<view class="info">学习时长：{{study}}h</view>
+			<view class="info">完成任务：{{completeTask}}</view>
+			<view class="info">完成率：{{rate}}%</view>
 			<view class="info">学习状态：</view>
 		</view>
 		<view class="agree">
 			<text>合约进度：</text>
-			<view style="margin: 1rem 0;"><Progress :width="progress+'%'"></Progress></view>
+			<view style="margin: 1rem 0;"><Progress :width="ProGress+'%'"></Progress></view>
 		</view>
 	</view>
 </template>
