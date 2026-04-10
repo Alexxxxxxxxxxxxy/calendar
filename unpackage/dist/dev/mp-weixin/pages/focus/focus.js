@@ -54,11 +54,6 @@ const _sfc_main = {
         url: "/pages/skill/skill"
       });
     };
-    const remitJump = () => {
-      common_vendor.index.navigateTo({
-        url: "/pages/remit/remit"
-      });
-    };
     const emotionJump = () => {
       common_vendor.index.navigateTo({
         url: "/pages/emotion/emotion"
@@ -71,9 +66,8 @@ const _sfc_main = {
         c: common_vendor.t(timerDisplay.value),
         d: common_vendor.o(handleClick),
         e: common_vendor.t(statusText.value),
-        f: common_vendor.o(remitJump),
-        g: common_vendor.o(emotionJump),
-        h: common_vendor.o(skillJump)
+        f: common_vendor.o(emotionJump),
+        g: common_vendor.o(skillJump)
       };
     };
   }

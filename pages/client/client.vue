@@ -4,6 +4,7 @@ import user from "../../public/client-o.png"
 
 const img = ref(null)
 const show = ref(true)
+const status = ref(false)
 
 const chooseAvatar = () => {
   wx.chooseImage({
@@ -25,10 +26,13 @@ const chooseAvatar = () => {
 	<view class="main">
 		<view class="layout">
 			<view class="profile">
-				<label for="icon" class="icon-set" @click="chooseAvatar">
-					<image :src="img?img:user"></image>
-				</label>
-				<view class="name">用户名称</view>
+				<view class="msg">
+					<label for="icon" class="icon-set" @click="chooseAvatar">
+						<image :src="img?img:user"></image>
+					</label>
+					<view class="name">未登录</view>
+				</view>
+				<view class="login" v-if="!status">登录/注册</view>
 			</view>
 			<view class="buts">
 				<view class="buts-point">我的数据和报告</view>
@@ -71,24 +75,35 @@ page{
 .profile{
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	gap: 1rem;
-	font-size: 1.5rem;
+	font-size: 1.2rem;
 	position: relative;
 	box-sizing: border-box;
-	.icon-set{
-		top: 38%;
-		left:1.5rem;
-		z-index: 5;
-		font-size: 1rem;
+	width: 100%;
+	.msg{
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		.icon-set{
+			top: 38%;
+			left:1.5rem;
+			z-index: 5;
+			font-size: 1rem;
+		}
+		image{
+			width: 5rem;
+			height: 5rem;
+			border-radius: 100%;
+			// background-color: $background-dark;
+			border:solid 1px $background-dark;
+		}
 	}
-	image{
-		width: 5rem;
-		height: 5rem;
-		border-radius: 100%;
-		// background-color: $background-dark;
-		border:solid 1px $background-dark;
+	.login{
+		background-color: gray;
+		padding: 0.2rem;
+		border-radius: 0.5rem;
 	}
 }
 .buts{

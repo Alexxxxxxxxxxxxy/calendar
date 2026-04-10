@@ -1,0 +1,105 @@
+
+/* 页面背景（Uniapp 适配：rpx 单位 + 移除 vw/vh 改用 rpx 适配） */
+page.data-v-449beb93 {
+  margin: 200rpx 0; /* 原 100px → 200rpx */
+  padding: 0;
+  width: 750rpx; /* Uniapp 标准屏幕宽度基准 */
+  min-height: 100vh; /* 保留高度自适应 */
+  background: linear-gradient(to right bottom, purple, rgb(232, 116, 215));
+}
+
+/* 日历容器（核心：px → rpx 换算） */
+.calendar.data-v-449beb93 {
+  background-color: white;
+  width: 800rpx; /* 原 400px → 800rpx */
+  max-width: 750rpx; /* 限制最大宽度适配屏幕 */
+  height: 760rpx; /* 原 380px → 760rpx */
+  margin: 0 auto;
+  padding: 40rpx; /* 原 20px → 40rpx */
+  border-radius: 40rpx; /* 原 20px → 40rpx */
+  box-shadow: 10rpx 20rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 10px 10px → 等比放大 */
+  box-sizing: border-box;
+}
+
+/* 日历头部 */
+.calendar-head.data-v-449beb93 {
+  box-sizing: border-box;
+  background-color: blueviolet;
+  width: 100%;
+  padding: 20rpx 40rpx; /* 原 10px 20px → 40rpx */
+  border-radius: 40rpx; /* 原 20px → 40rpx */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 30rpx; /* 原 15px → 30rpx */
+  box-shadow: 10rpx 10rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 5px 10px → 等比放大 */
+}
+.month-shower.data-v-449beb93, .year-shower.data-v-449beb93 {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.month-shower.data-v-449beb93:hover, .year-shower.data-v-449beb93:hover {
+  transform: scale(1.12); /* 缩放比例不变 */
+}
+.year-picker.data-v-449beb93 {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20rpx; /* 原 10px → 20rpx */
+}
+
+/* 日历主体 */
+.days-picker.data-v-449beb93 {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40rpx; /* 原 20px → 40rpx */
+  padding: 20rpx 20rpx; /* 原 10px 10px → 20rpx */
+}
+.days-list.data-v-449beb93 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  place-items: center;
+  gap: 20rpx; /* 原 10px → 20rpx */
+  width: 100%;
+  box-sizing: border-box;
+  border: solid 2rpx rgb(140, 140, 140); /* 原 1px → 2rpx 适配高清屏 */
+  padding: 10rpx; /* 原 5px → 10rpx */
+  border-radius: 20rpx; /* 原 10px → 20rpx */
+  box-shadow: 10rpx 10rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 5px 10px → 等比放大 */
+}
+.week-item.data-v-449beb93 {
+  padding: 10rpx; /* 原 5px → 10rpx */
+  border-radius: 10rpx; /* 原 5px → 10rpx */
+  font-size: 28rpx; /* 补充适配字体大小 */
+}
+.days-shower.data-v-449beb93 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  place-items: center;
+  gap: 20rpx; /* 原 10px → 20rpx */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 10rpx; /* 原 5px → 10rpx */
+}
+.empty.data-v-449beb93 {
+  padding: 10rpx; /* 原 5px → 10rpx */
+  border-radius: 10rpx; /* 原 5px → 10rpx */
+}
+.item.data-v-449beb93 {
+  padding: 10rpx; /* 原 5px → 10rpx */
+  border-radius: 10rpx; /* 原 5px → 10rpx */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-size: 28rpx; /* 补充适配字体大小 */
+}
+.item.data-v-449beb93:hover {
+  background-color: antiquewhite;
+}

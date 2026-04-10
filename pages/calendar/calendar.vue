@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 import Progress from "@/components/Progress.vue"
 import NewClass from "@/components/NewClass.vue"
+import Calendar from "@/components/Calendar.vue"
 import {onHide,onLoad} from "@dcloudio/uni-app"
 import { useUserContext } from '../../context/userContext';
 
@@ -86,21 +87,14 @@ const handleClose = ()=>{
 			<view class="title">连续打卡{{continuous}}天</view>
 			<view class="add" @click="handleClick">+</view>
 		</view>
-		<view class="calendar">
-			<text>日历</text>
-		</view>
+		<view class="calendar-wrapper"><Calendar ></Calendar></view>
 		<view class="time">
 			<view class="date">
 				{{year}}年{{month}}月{{day}}日
 			</view>
 			<view class="info">学习时长：{{study}}h</view>
-			<view class="info">完成任务：{{completeTask}}</view>
 			<view class="info">完成率：{{rate}}%</view>
 			<view class="info">学习状态：</view>
-		</view>
-		<view class="agree">
-			<text>合约进度：</text>
-			<view style="margin: 1rem 0;"><Progress :width="ProGress+'%'"></Progress></view>
 		</view>
 	</view>
 </template>
@@ -162,16 +156,12 @@ $background-dark: #e0e0e0;
 		}
 	}
 }
-.calendar{
-	margin: 1rem;
-	margin-top:0;
-	padding: 0.5rem;
-	position: relative;
-	background-color: $background-light;
-	min-height: 18rem;
-	border-radius: 0.5rem;
-	font-size: 1.2rem;
+.calendar-wrapper{
+	width: 100%;
 	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	transform: scale(0.95);
 }
 .time{
 	margin: 1rem;
@@ -195,14 +185,5 @@ $background-dark: #e0e0e0;
 		font-size: 1rem;
 		box-sizing: border-box;
 	}
-}
-.agree{
-	background-color: $background-light;
-	margin: 1rem;
-	padding: 0.5rem;
-	font-size: 1rem;
-	border-radius: 0.5rem;
-	min-height: 3rem;
-	box-sizing: border-box;
 }
 </style>

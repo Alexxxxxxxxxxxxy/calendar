@@ -69,11 +69,6 @@ const skillJump = ()=>{
 	})
 }
 
-const remitJump = ()=>{
-	uni.navigateTo({
-		url:"/pages/remit/remit"
-	})
-}
 
 const emotionJump = ()=>{
 	uni.navigateTo({
@@ -106,7 +101,6 @@ const emotionJump = ()=>{
       <view class="status-group">
         <view style="display: flex;align-items: center; gap: 30rpx;">
           <view class="status-tag">{{ statusText }}</view>
-          <view class="status-icon" @click="remitJump">!</view>
         </view>
         <view class="status-tag">返回</view>
       </view>
@@ -222,18 +216,6 @@ $primary-color: #007AFF;
   border-radius: 20rpx; // 10px * 2
   font-size: 30rpx; // 15px * 2
   color: #555;
-}
-
-.status-icon {
-  width: 36rpx; // 18px * 2
-  height: 36rpx; // 18px * 2
-  background-color: $primary-color;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20rpx; // 10px * 2
 }
 
 .button-group {

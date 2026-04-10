@@ -1,5 +1,48 @@
 <script setup>
 import SkillCar from "../../components/SkillCar.vue"
+
+import {onLoad} from "@dcloudio/uni-app"
+
+import {ref} from "vue"
+const incre = ref(0)
+const replace = ref(0)
+const remit = ref(0)
+onLoad(()=>{
+	uni.showLoading({
+		title:"加载中...",
+		mask:true
+	})
+	uni.request({
+		url:"http://106.53.182.241:8000/api/client/bag",
+		method:"GET",
+		header:{
+			"Content-Type":"application/json"
+		},
+		success:(res)=>{
+			if(res.statusCode!=200){
+				uni.showToast({
+					icon:"none",
+					title:"请求失败"+res.statusCode,
+					duration:2000
+				})
+				return 
+			}
+			incre.value = res.data.data.cards[0].count
+			replace.value = res.data.data.cards[1].count
+			remit.value = res.data.data.cards[2].count
+		},
+		fail:(err)=>{
+			uni.showToast({
+			  title: err.errMsg || "网络请求失败",
+			  icon: "none", 
+			  duration: 2000
+			})
+			
+		},complete:()=>{
+			uni.hideLoading()
+		}
+	})
+})
 </script>
 
 <template>
@@ -7,9 +50,9 @@ import SkillCar from "../../components/SkillCar.vue"
 		<view class="car">
 			<view class="title">技能卡库存</view>
 			<view class="display">
-				<SkillCar text="减负卡" num="12"></SkillCar>
-				<SkillCar text="重排卡" num="11"></SkillCar>
-				<SkillCar text="免罚卡" num="12"></SkillCar>
+				<SkillCar text="减负卡" :num="incre"></SkillCar>
+				<SkillCar text="重排卡" :num="replace"></SkillCar>
+				<SkillCar text="免罚卡" :num="remit"></SkillCar>
 			</view>
 		</view>
 	</view>

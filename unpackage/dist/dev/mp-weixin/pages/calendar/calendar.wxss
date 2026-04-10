@@ -77,16 +77,12 @@
   transition: all;
   transition-duration: 500ms;
 }
-.calendar.data-v-6e8913ab {
-  margin: 1rem;
-  margin-top: 0;
-  padding: 0.5rem;
-  position: relative;
-  background-color: #f5f5f5;
-  min-height: 18rem;
-  border-radius: 0.5rem;
-  font-size: 1.2rem;
+.calendar-wrapper.data-v-6e8913ab {
+  width: 100%;
   box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  transform: scale(0.95);
 }
 .time.data-v-6e8913ab {
   margin: 1rem;
@@ -109,14 +105,5 @@
 }
 .time .info.data-v-6e8913ab {
   font-size: 1rem;
-  box-sizing: border-box;
-}
-.agree.data-v-6e8913ab {
-  background-color: #f5f5f5;
-  margin: 1rem;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  min-height: 3rem;
   box-sizing: border-box;
 }

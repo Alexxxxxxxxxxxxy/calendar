@@ -2,16 +2,16 @@
 const common_vendor = require("../../common/vendor.js");
 const context_userContext = require("../../context/userContext.js");
 if (!Math) {
-  (NewClass + Progress)();
+  (NewClass + Calendar)();
 }
-const Progress = () => "../../components/Progress.js";
 const NewClass = () => "../../components/NewClass.js";
+const Calendar = () => "../../components/Calendar.js";
 const _sfc_main = {
   __name: "calendar",
   setup(__props) {
     const { continuous_day, progress } = context_userContext.useUserContext();
     const continuous = common_vendor.ref(continuous_day);
-    const ProGress = common_vendor.ref(progress);
+    common_vendor.ref(progress);
     const show = common_vendor.ref(false);
     const study = common_vendor.ref(0);
     const completeTask = common_vendor.ref(0);
@@ -80,11 +80,7 @@ const _sfc_main = {
         f: common_vendor.t(month),
         g: common_vendor.t(common_vendor.unref(day)),
         h: common_vendor.t(study.value),
-        i: common_vendor.t(completeTask.value),
-        j: common_vendor.t(rate.value),
-        k: common_vendor.p({
-          width: ProGress.value + "%"
-        })
+        i: common_vendor.t(rate.value)
       });
     };
   }

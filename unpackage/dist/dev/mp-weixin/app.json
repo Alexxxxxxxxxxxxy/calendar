@@ -10,7 +10,6 @@
     "pages/today/today",
     "pages/contract/contract",
     "pages/skill/skill",
-    "pages/remit/remit",
     "pages/emotion/emotion"
   ],
   "window": {

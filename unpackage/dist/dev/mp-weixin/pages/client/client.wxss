@@ -49,24 +49,35 @@ page.data-v-394faf7f {
 .profile.data-v-394faf7f {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   position: relative;
   box-sizing: border-box;
+  width: 100%;
 }
-.profile .icon-set.data-v-394faf7f {
+.profile .msg.data-v-394faf7f {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.profile .msg .icon-set.data-v-394faf7f {
   top: 38%;
   left: 1.5rem;
   z-index: 5;
   font-size: 1rem;
 }
-.profile image.data-v-394faf7f {
+.profile .msg image.data-v-394faf7f {
   width: 5rem;
   height: 5rem;
   border-radius: 100%;
   border: solid 1px #e0e0e0;
+}
+.profile .login.data-v-394faf7f {
+  background-color: gray;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
 }
 .buts.data-v-394faf7f {
   box-sizing: border-box;

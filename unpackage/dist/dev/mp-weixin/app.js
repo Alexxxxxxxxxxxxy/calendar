@@ -13,7 +13,6 @@ if (!Math) {
   "./pages/today/today.js";
   "./pages/contract/contract.js";
   "./pages/skill/skill.js";
-  "./pages/remit/remit.js";
   "./pages/emotion/emotion.js";
 }
 const _sfc_main = {

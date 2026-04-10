@@ -111,17 +111,6 @@
   font-size: 30rpx;
   color: #555;
 }
-.status-icon.data-v-e6ed2a79 {
-  width: 36rpx;
-  height: 36rpx;
-  background-color: #007AFF;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20rpx;
-}
 .button-group.data-v-e6ed2a79 {
   width: 100%;
   display: flex;
