@@ -23,126 +23,195 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+/* 微信小程序 page 样式 */
 page.data-v-1cf27b2a {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #667eea;
+  /* 兜底背景色 */
+}
+
+/* 微信小程序专用固定背景层 */
+.bg-layer.data-v-1cf27b2a {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  z-index: -1;
+}
+.page-container.data-v-1cf27b2a {
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  position: relative;
 }
 .main.data-v-1cf27b2a {
-  margin-top: 1rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 1.2rem;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
-.dum.data-v-1cf27b2a {
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card.data-v-1cf27b2a {
+  background: rgba(255, 255, 255, 0.25);
+  /* 降级处理：微信小程序不支持 backdrop-filter 时使用半透明背景 */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+.glass-card.data-v-1cf27b2a:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.glass-card-inner.data-v-1cf27b2a {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0.8rem;
+}
+
+/* 用户卡片 */
+.user-card.data-v-1cf27b2a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem;
-  padding: 0.5rem;
-  box-sizing: border-box;
+  padding: 1.2rem;
 }
-.dum .dum-point1.data-v-1cf27b2a {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 100%;
-  box-sizing: border-box;
-  border: solid 1px #f5f5f5;
-  background-color: #f5f5f5;
-}
-.dum .dum-point2.data-v-1cf27b2a {
+.user-card .avatar-section.data-v-1cf27b2a {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 7rem;
-  height: 2rem;
-  border-radius: 0.2rem;
-  box-sizing: border-box;
-  padding: 0.5rem;
+  gap: 1rem;
 }
-.dum .dum-point2 .coin.data-v-1cf27b2a {
-  width: 1.8rem;
-  height: 1.8rem;
+.user-card .avatar.data-v-1cf27b2a {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+.user-card .user-info.data-v-1cf27b2a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.user-card .welcome-text.data-v-1cf27b2a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+.user-card .streak-text.data-v-1cf27b2a {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+.user-card .coin-section.data-v-1cf27b2a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+}
+.user-card .coin-icon.data-v-1cf27b2a {
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
 }
-.agree.data-v-1cf27b2a, .plan.data-v-1cf27b2a {
-  text-align: center;
-  align-items: center;
-  margin: 1rem;
-  height: auto;
-  padding: 0.5rem;
-  background-color: #f5f5f5;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  box-sizing: border-box;
+.user-card .coin-value.data-v-1cf27b2a {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
 }
-.plan.data-v-1cf27b2a {
+
+/* 进度卡片 */
+.progress-card.data-v-1cf27b2a {
+  padding: 1.2rem;
+}
+.progress-card .card-header.data-v-1cf27b2a {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.8rem;
-  justify-content: center;
-  align-items: start;
-}
-.plan text.data-v-1cf27b2a:nth-child(1) {
-  font-size: 1rem;
-}
-.plan text.data-v-1cf27b2a:nth-child(2) {
-  width: 100%;
-  margin: 2rem 0;
-  margin-bottom: 3rem;
-  text-align: center;
-  font-size: 2rem;
-}
-.fun.data-v-1cf27b2a {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  margin: 1rem;
-  height: auto;
-  box-sizing: border-box;
+  margin-bottom: 1rem;
 }
-.fun .check.data-v-1cf27b2a {
-  background-color: #f5f5f5;
-  width: 47%;
-  height: 10rem;
+.progress-card .card-title.data-v-1cf27b2a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+.progress-card .progress-text.data-v-1cf27b2a {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+.progress-card .progress-bar-container.data-v-1cf27b2a {
+  margin-top: 0.5rem;
+}
+
+/* 计划卡片 */
+.plan-card.data-v-1cf27b2a {
+  padding: 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+}
+.plan-card .plan-header .plan-days.data-v-1cf27b2a {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+}
+.plan-card .plan-action.data-v-1cf27b2a {
+  text-align: center;
+}
+.plan-card .plan-action .action-text.data-v-1cf27b2a {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 功能区域 */
+.fun-section.data-v-1cf27b2a {
+  display: flex;
+  gap: 1rem;
+}
+.fun-section .today-card.data-v-1cf27b2a {
+  width: 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem;
-  font-size: 1.5rem;
-  border-radius: 0.3rem;
-  box-sizing: border-box;
+  padding: 1.5rem 0.5rem;
 }
-.fun .skill.data-v-1cf27b2a {
+.fun-section .skill-group.data-v-1cf27b2a {
+  width: 48%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-  font-size: 1.5rem;
-  width: 47%;
-  height: 10rem;
-  box-sizing: border-box;
 }
-.fun .skill .skill-point.data-v-1cf27b2a {
-  background-color: #f5f5f5;
-  width: 100%;
-  height: 50%;
-  padding: 1rem;
+.fun-section .skill-card.data-v-1cf27b2a {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
-  border-radius: 0.3rem;
-  box-sizing: border-box;
+  padding: 0.8rem 0.5rem;
+}
+.fun-section .card-icon.data-v-1cf27b2a {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+.fun-section .card-label.data-v-1cf27b2a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
 }

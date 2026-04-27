@@ -4,14 +4,16 @@ const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "today",
   setup(__props) {
-    const { progress } = context_userContext.useUserContext();
+    const { progress, token } = context_userContext.useUserContext();
     const Progress = common_vendor.ref(progress);
     const tasks = common_vendor.ref([]);
     const stats = common_vendor.ref({
-      count: 2,
-      totalHours: "4h"
+      count: 0,
+      totalHours: "0h"
     });
-    common_vendor.onLoad(() => {
+    common_vendor.onShow(() => {
+      if (!token.value)
+        return;
       common_vendor.index.showLoading({
         title: "加载中...",
         mask: true
@@ -20,7 +22,8 @@ const _sfc_main = {
         url: "http://106.53.182.241:8000/api/today/list",
         method: "GET",
         header: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
         },
         success: (res) => {
           if (res.statusCode != 200) {

@@ -2,6 +2,9 @@
 import start_gray from "../public/start.png"
 import start_yellow from "../public/start-yellow.png"
 import { ref } from "vue";
+import { useUserContext } from '../context/userContext.js';
+
+const { token , coins } = useUserContext()
 
 const n = ref(0);
 const points = Array.from({length: 5}, (_, i) => ({id: i}));
@@ -21,6 +24,7 @@ const knowledge = ref("")
 const knowledges = ref([])
 const testTime = ref("")
 const targetScore = ref(null)
+const available_time = ref(0)
 const credit = ref(null)
 
 const handleSubmit = ()=>{
@@ -77,6 +81,42 @@ const handleSubmit = ()=>{
 		});
 		return;
 	}
+	if(!token.value){
+		uni.showToast({
+			title:"请先登录！",
+			icon:"none",
+			duration:1500
+		})
+		return
+	}
+	
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	})
+	uni.request({
+		url:"http://106.53.182.241:8000/api/plan/generate",
+		method:"POST",
+		header:{
+			"Content-Type":"application/json",
+			"Authorization": "Bearer " + token.value,
+		},
+		data:{
+			subject_name:project.value,
+			knowledge_scope:knowledges.value,
+			exam_date:testTime.value,
+			target_score:targetScore.value,
+			daily_available_minutes:0,
+			credits:credit.value,
+			mastery_level:n.value,
+			difficulty_rating:t.value,
+			contract_days:30,
+			deposit_coins:coins.value,
+			plan_type:"string",
+			first_day_minutes:0,
+		}
+	})
+	
 	project.value=""
 	knowledge.value=""
 	knowledges.value=[]
@@ -108,270 +148,336 @@ const handleX = ()=>{
 </script>
 
 <template>
-	<view class="main">
-		<view class="layout">
-			<view class="close" @click="handleX">X</view>
-			<view class="course">
-				<label for="course">输入学习科目：</label>
-				<input type="text" placeholder="高等数学" id="course" name="course" placeholder-class="course-holder" v-model="project"/>
-			</view>
-			<view class="point">
-				<view class="input-point">
-					<label for="point">请添加知识点：</label>
-					<input type="text" placeholder="微积分" id="point" name="point" placeholder-class="point-holder" v-model="knowledge"/>
-					<button class="addPoint" size="mini" @click="handleAdd">添加</button>
+	<view class="modal-overlay">
+		<!-- 微信小程序专用背景层 -->
+		<view class="modal-bg"></view>
+		
+		<view class="main">
+			<view class="layout glass-card">
+				<view class="close-btn" @click="handleX">
+					<text class="close-icon">✕</text>
 				</view>
-				<view class="point-list">
-					<view class="list-point" v-for="(kn, index) in knowledges" :key="index">
-					  {{ kn }}
+				
+				<view class="form-title">创建学习计划</view>
+				
+				<view class="form-group">
+					<label class="form-label">输入学习科目</label>
+					<input type="text" placeholder="例如：高等数学" class="form-input" v-model="project"/>
+				</view>
+				
+				<view class="form-group">
+					<label class="form-label">添加知识点</label>
+					<view class="input-with-btn">
+						<input type="text" placeholder="例如：微积分" class="form-input flex-1" v-model="knowledge"/>
+						<button class="add-btn" size="mini" @click="handleAdd">
+							<text class="add-icon">+</text>
+						</button>
+					</view>
+					<view class="tag-list" v-if="knowledges.length > 0">
+						<view class="tag-item" v-for="(kn, index) in knowledges" :key="index">
+							{{ kn }}
+						</view>
+					</view>
+				</view>
+				
+				<view class="form-row">
+					<view class="form-group flex-1">
+						<label class="form-label">考试日期</label>
+						<input type="text" placeholder="2026-01-11" class="form-input" v-model="testTime"/>
+					</view>
+					<view class="form-group flex-1">
+						<label class="form-label">目标分数</label>
+						<input type="text" placeholder="100" class="form-input" v-model="targetScore"/>
+					</view>
+				</view>
+				
+				<view class="form-group">
+					<label class="form-label">学分</label>
+					<input type="number" placeholder="2" class="form-input" v-model="credit"/>
+				</view>
+				
+				<view class="form-group">
+					<label class="form-label">掌握程度</label>
+					<view class="rating-row">
+						<view 
+						  v-for="(point,index) in points" 
+						  class="rating-dot" 
+						  @click="handlePointClick(index)" 
+						  :key="index" 
+						  :class="{'active': index < n}"
+						></view>
+					</view>
+				</view>
+				
+				<view class="form-group">
+					<label class="form-label">难度自评</label>
+					<view class="rating-row">
+						<image 
+						  v-for="(start, index) in starts" 
+						  @click="handleStartClick(index)" 
+						  class="rating-star" 
+						  :key="index" 
+						  :src="index >= t ? start_gray : start_yellow"
+						/>
 					</view>
 				</view>
 			</view>
-			<view class="date">
-				<label for="date">考试日期：</label>
-				<input type="text" placeholder="2026.1.11" id="date" name="date" placeholder-class="date-holder" v-model="testTime"/>
-			</view>
-			<view class="score">
-				<label for="score">目标分数：</label>
-				<input type="text" placeholder="100" id="score" name="score" placeholder-class="score-holder" v-model="targetScore"/>
-			</view>
-			<view class="credit">
-				<label for="credit">学分：&emsp;&emsp;</label>
-				<input type="number" placeholder="2" id="credit" name="credit" placeholder-class="credit-holder" v-model="credit"/>
-			</view>
-			<view class="master">
-				<text>掌握程度：</text>
-				<view class="master-list">
-					<view v-for="(point,index) in points" class="master-point" @click="handlePointClick(index)" :key="index" :class="{'active-master':index<n}"></view>
-				</view>
-			</view>
-			<view class="diff">
-				<text>难度自评：</text>
-				<view class="diff-list">
-					<image 
-					  v-for="(start, index) in starts" 
-					  @click="handleStartClick(index)" 
-					  class="diff-point" 
-					  :key="index" 
-					  :src="index >= t ? start_gray : start_yellow"
-					/>
-				</view>
-			</view>
+			
+			<button class="submit-btn" @click="handleSubmit">
+				<text class="submit-text">生成计划</text>
+			</button>
 		</view>
-		<button size="mini" class="generate" @click="handleSubmit">生成计划</button>
 	</view>
 </template>
 
 <style scoped lang="scss">
-$primary-color: #4a90e2;    
-$secondary-color: #5cb85c;  
-$background-light: #f5f5f5;    
-$card-background: #ffffff;     
-$text-dark: #333333;           
-$text-light: #666666;          
-$border-color: #e0e0e0;
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+$glass-bg: rgba(255, 255, 255, 0.95);
+$glass-border: rgba(255, 255, 255, 0.3);
+$input-border: rgba(102, 126, 234, 0.3);
+$text-primary: #2d3748;
+$text-secondary: #718096;
+$text-light: #a0aec0;
 
-input:hover {
-  border-color: $primary-color;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 1rem;
+  box-sizing: border-box;
 }
+
+/* 微信小程序专用模态框背景 */
+.modal-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+  z-index: -1;
+}
+
 .main {
-  width: auto;
-  height: auto;
+  width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  margin: 2rem 1rem;
-  padding: 0.2rem;
+  gap: 1.2rem;
   box-sizing: border-box;
-  // background-color: $background-light;
+  position: relative;
+  z-index: 1;
 }
-.layout{
-	display: block;
-	width: 100%;
-	height: auto;
-	background-color: $card-background;
-	padding: 0.2rem;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	border-radius: 0.5rem;
-	border: solid 1px;
-	border-color: $border-color;
-	box-shadow: 5px 10px 5px rgba(0, 0, 0, 0.05);
-	position: relative;
-	box-sizing: border-box;
-}
-.close{
-	width: 1rem;
-	height: 1rem;
-	position: absolute;
-	text-align: right;
-	right: 0.5rem;
-	top: 0.5rem;
-	box-sizing: border-box;
-}
-.course {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  justify-content: flex-start;
-  align-items: center;
-  margin: 0.2rem;
-  font-size: 0.8rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
 
-  #course {
-    border:solid 1px #e0e0e0;
-    border-radius: 0.5rem;
-	background-color: $card-background;
-	transition: border-color 0.3s;
-    padding: 0.2rem;
+/* 微信小程序兼容的卡片样式 */
+.glass-card {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+  
+  &:active {
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
   }
-}	
-.course-holder{
-	font-size: 0.8rem;
-	padding: 0.2rem;
-	color: $text-light;
-	box-sizing: border-box;
+  
+  .close-icon {
+    font-size: 1.2rem;
+    color: $text-secondary;
+    font-weight: 300;
+  }
 }
-.point{
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: flex-start;
-	gap: 1em;
-	padding: 0.5rem;
-	margin: 0.2rem;
-	font-size: 0.8rem;
-	box-sizing: border-box;
-	.input-point{
-		display: flex;
-		flex-direction: row;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
-		#point{
-			border: solid 1px $border-color;
-			border-radius: 0.5rem;
-			padding: 0.2rem;
-		}
-	}
-	.point-list{
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		gap: 1rem;
-		justify-content: flex-start;
-		align-items: center;
-		.list-point{
-			border: solid 1px $border-color;
-		    padding: 0.3rem;
-		    border-radius: 0.5rem;
-		    background-color: $background-light;
-		    color: $text-dark;
-		}
-	}
-	.addPoint{
-		background-color: $primary-color;
-		border: none;
-		color: white;
-		&:hover{
-			cursor: pointer;
-			background-color: darken($primary-color, 10%);
-		}
-	}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  /* 微信小程序兼容：简化渐变文字 */
+  background: $primary-gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* 兜底颜色 */
+  color: #667eea;
 }
-.point-holder{
-	@extend .course-holder;
+
+.form-group {
+  margin-bottom: 1.2rem;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
-.date{
-	@extend .course;
-	background-color: inherit;
-	#date{
-		@extend #course;
-	}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 0.5rem;
 }
-.date-holder{
-		@extend .course-holder;
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid $input-border;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  color: $text-primary;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  }
+  
+  &::placeholder {
+    color: $text-light;
+  }
 }
-.score{
-	@extend .course;
-	background-color: inherit;
-	#score{
-		@extend #course;
-	}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
 }
-.score-holder{
-	@extend .course-holder;
+
+.flex-1 {
+  flex: 1;
 }
-.master{
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: flex-start;
-	gap: 1rem;
-	padding: 0.5rem;
-	margin: 0.2rem;
-	font-size: 0.8rem;
-	box-sizing: border-box;
-	.master-list{
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		box-sizing: border-box;
-		.master-point{
-			width: 2rem;
-			height: 2rem;
-			border: solid 1px $border-color;
-			border-radius: 100%;
-			background-color: $background-light;
-			box-sizing: border-box;
-		}
-		.master-point::hover{
-			cursor: pointer;
-			box-sizing: border-box;
-		}
-	}
+
+.input-with-btn {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
 }
-.active-master {
-  background-color: greenyellow !important;
-  border-color: #4a90e2 !important;
+
+.add-btn {
+  width: 3rem;
+  height: 3rem;
+  background: $primary-gradient;
+  border: none;
+  border-radius: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  }
+  
+  .add-icon {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: 300;
+    line-height: 1;
+  }
 }
-.credit{
-	@extend .course;
-	background-color: inherit;
-	#credit{
-		@extend #course;
-	}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
 }
-.credit-holder{
-	@extend .course-holder;
+
+.tag-item {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.25);
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  color: $text-primary;
+  font-weight: 500;
 }
-.diff{
-	@extend .master;
-	flex-direction: row;
-	justify-content: space-between;
-	.diff-list{
-		@extend .master-list;
-		width: 50%;
-		.diff-point{
-			width: 1rem;
-			height: 1rem;
-		}
-	}
+
+.rating-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
 }
-.generate{
-		background-color: $primary-color;
-		color: white;
-		border: none;
-		box-sizing: border-box;
-		&:hover{
-			cursor: pointer;
-			background-color: darken($primary-color, 10%);
-		}
+
+.rating-dot {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.08);
+  border: 3px solid rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  
+  &.active {
+    background: $success-gradient;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.35);
+  }
+  
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.rating-star {
+  width: 2rem;
+  height: 2rem;
+  transition: all 0.2s ease;
+  
+  &:active {
+    transform: scale(0.85);
+  }
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: $primary-gradient;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.45);
+  }
+  
+  .submit-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+  }
 }
 </style>

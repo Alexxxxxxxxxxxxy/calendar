@@ -23,115 +23,315 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+/* 成就墙配色 - 金色暖调 */
+/* 荣誉墙配色 - 蓝色水晶调 */
+/* 微信小程序 page 样式 */
 page.data-v-127b3c96 {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
+  background-color: #667eea;
+  overflow-x: hidden;
 }
-.main.data-v-127b3c96 {
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  align-items: flex-start;
-  justify-content: center;
+
+/* 微信小程序专用固定背景层 */
+.bg-layer.data-v-127b3c96 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  z-index: -1;
+  /* 增加背景层次感 */
 }
-.achivement.data-v-127b3c96 {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: flex-start;
+.bg-layer.data-v-127b3c96::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+}
+.page-container.data-v-127b3c96 {
+  min-height: 100vh;
+  padding: 40rpx 30rpx;
   box-sizing: border-box;
-}
-.achivement .title.data-v-127b3c96 {
-  background-color: #f5f5f5;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.5rem;
-  margin-bottom: 3rem;
-  box-sizing: border-box;
-}
-.achivement .wall.data-v-127b3c96 {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0.5rem 1.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 3rem;
   position: relative;
 }
-.achivement .wall .left.data-v-127b3c96, .achivement .wall .mid.data-v-127b3c96, .achivement .wall .right.data-v-127b3c96 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-.achivement .wall .left .col.data-v-127b3c96, .achivement .wall .mid .col.data-v-127b3c96, .achivement .wall .right .col.data-v-127b3c96 {
-  min-width: 3rem;
-  min-height: 5rem;
-  background-color: yellow;
-  border-radius: 0.6rem;
-  box-sizing: border-box;
-}
-.achivement .wall .left .bot.data-v-127b3c96, .achivement .wall .mid .bot.data-v-127b3c96, .achivement .wall .right .bot.data-v-127b3c96 {
-  box-sizing: border-box;
-  background-color: #f5f5f5;
-  padding: 0.2rem 0.8rem;
-  border-radius: 0.3rem;
-}
-.achivement .wall .mid.data-v-127b3c96 {
-  position: absolute;
-  z-index: 5;
-  left: 40.5%;
-  bottom: -5%;
-}
-.achivement .wall .mid .col.data-v-127b3c96 {
-  min-width: 4rem;
-  min-height: 10rem;
-}
-.achivement .wall .mid .bot.data-v-127b3c96 {
-  font-size: 1.2rem;
-}
-.honor.data-v-127b3c96 {
+.main.data-v-127b3c96 {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: flex-start;
+  gap: 60rpx;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
-.honor .title.data-v-127b3c96 {
-  background-color: #f5f5f5;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.5rem;
-  margin-bottom: 3rem;
+
+/* 页面头部 - 通用 */
+.page-header.data-v-127b3c96 {
+  text-align: center;
+  padding: 20rpx 0;
+  position: relative;
+}
+.page-header .header-title.data-v-127b3c96 {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16rpx;
+  text-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+  letter-spacing: 2rpx;
+}
+.page-header .header-subtitle.data-v-127b3c96 {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+/* 成就墙专属头部 */
+.achievement-header .header-title.data-v-127b3c96 {
+  text-shadow: 0 4rpx 20rpx rgba(255, 215, 0, 0.3);
+}
+
+/* 荣誉墙专属头部 */
+.honor-header .header-title.data-v-127b3c96 {
+  text-shadow: 0 4rpx 20rpx rgba(79, 172, 254, 0.3);
+}
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card.data-v-127b3c96 {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+  padding: 50rpx 40rpx;
+  position: relative;
   box-sizing: border-box;
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  /* 兼容 iOS 微信小程序 */
 }
-.honor .place.data-v-127b3c96 {
-  width: 100%;
-  padding: 2rem;
-  background-color: #f5f5f5;
+
+/* 通用网格布局 */
+.wall-grid.data-v-127b3c96 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4rem;
-  box-sizing: border-box;
-  justify-content: space-around;
-  align-items: center;
+  gap: 40rpx 30rpx;
+  padding: 10rpx;
 }
-.honor .place .item.data-v-127b3c96 {
-  box-sizing: border-box;
-  background-color: #e0e0e0;
+
+/* ==================== 成就墙样式 - 金色圆形徽章 ==================== */
+.achievement-wall .achievement-item.data-v-127b3c96 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding: 30rpx 20rpx;
+  background: rgba(255, 215, 0, 0.15);
+  border-radius: 32rpx;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  /* 金色光泽层 */
+}
+.achievement-wall .achievement-item.data-v-127b3c96::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.achievement-wall .achievement-item.data-v-127b3c96:active {
+  transform: scale(0.96);
+  background: rgba(255, 215, 0, 0.25);
+}
+.achievement-wall .achievement-item.data-v-127b3c96:active::before {
+  opacity: 1;
+}
+.achievement-wall .achievement-item .achievement-badge.data-v-127b3c96 {
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  transform: rotate(45deg);
+  box-shadow: 0 12rpx 40rpx rgba(246, 211, 101, 0.4);
+  position: relative;
 }
-.honor .place .item text.data-v-127b3c96 {
-  transform: rotate(-45deg);
+.achievement-wall .achievement-item .achievement-badge .badge-inner.data-v-127b3c96 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* 徽章高光 */
+}
+.achievement-wall .achievement-item .achievement-badge .badge-inner.data-v-127b3c96::after {
+  content: "";
+  position: absolute;
+  top: 10rpx;
+  left: 20rpx;
+  width: 40rpx;
+  height: 20rpx;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+.achievement-wall .achievement-item .achievement-badge .badge-icon.data-v-127b3c96 {
+  font-size: 56rpx;
+  z-index: 1;
+}
+.achievement-wall .achievement-item .achievement-name.data-v-127b3c96 {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  line-height: 1.3;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== 荣誉墙样式 - 蓝色六边形水晶徽章 ==================== */
+.honor-wall .honor-item.data-v-127b3c96 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding: 30rpx 20rpx;
+  background: rgba(79, 172, 254, 0.15);
+  border-radius: 24rpx;
+  border: 1px solid rgba(79, 172, 254, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  /* 蓝色光泽层 */
+}
+.honor-wall .honor-item.data-v-127b3c96::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.honor-wall .honor-item.data-v-127b3c96:active {
+  transform: scale(0.96);
+  background: rgba(79, 172, 254, 0.25);
+}
+.honor-wall .honor-item.data-v-127b3c96:active::before {
+  opacity: 1;
+}
+.honor-wall .honor-item .honor-badge.data-v-127b3c96 {
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+          clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 12rpx 40rpx rgba(79, 172, 254, 0.4);
+  position: relative;
+}
+.honor-wall .honor-item .honor-badge .badge-inner.data-v-127b3c96 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* 水晶高光 */
+}
+.honor-wall .honor-item .honor-badge .badge-inner.data-v-127b3c96::after {
+  content: "";
+  position: absolute;
+  top: 15rpx;
+  left: 15rpx;
+  width: 30rpx;
+  height: 30rpx;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+.honor-wall .honor-item .honor-badge .badge-icon.data-v-127b3c96 {
+  font-size: 52rpx;
+  z-index: 1;
+}
+.honor-wall .honor-item .honor-name.data-v-127b3c96 {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  line-height: 1.3;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 空状态 - 通用 */
+.empty-state.data-v-127b3c96 {
+  grid-column: 1/-1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+  padding: 100rpx 40rpx;
+}
+.empty-state .empty-icon.data-v-127b3c96 {
+  font-size: 120rpx;
+  opacity: 0.7;
+  animation: float-127b3c96 3s ease-in-out infinite;
+  /* 浮动动画 */
+}
+.empty-state .empty-text.data-v-127b3c96 {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.empty-state .empty-subtext.data-v-127b3c96 {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+
+/* 成就空状态 */
+.achievement-empty .empty-icon.data-v-127b3c96 {
+  animation-delay: 0s;
+}
+
+/* 荣誉空状态 */
+.honor-empty .empty-icon.data-v-127b3c96 {
+  animation-delay: 0.5s;
+}
+
+/* 浮动动画关键帧 */
+@keyframes float-127b3c96 {
+0%, 100% {
+    transform: translateY(0);
+}
+50% {
+    transform: translateY(-20rpx);
+}
 }

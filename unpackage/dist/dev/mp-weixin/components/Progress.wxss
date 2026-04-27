@@ -26,20 +26,48 @@
 .bar.data-v-0b11ee78 {
   margin: 0.5rem 0;
   width: 100%;
-  background-color: #e0e0e0;
-  border-radius: 0.5rem;
-}
-.bar .one.data-v-0b11ee78 {
-  width: 1px;
-  height: 100%;
+  height: 0.8rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .bar .progress.data-v-0b11ee78 {
   height: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: cornflowerblue;
-  border-radius: 0.5rem;
-  padding-right: 0.1rem;
-  background: linear-gradient(45deg, #007bff 0%, #007bff 10%, #ffffff 10%, #ffffff 20%, #007bff 20%, #007bff 30%, #ffffff 30%, #ffffff 40%, #007bff 40%, #007bff 50%, #ffffff 50%, #ffffff 60%, #007bff 60%, #007bff 70%, #ffffff 70%, #ffffff 80%, #007bff 80%, #007bff 90%, #ffffff 90%);
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* 微信小程序兼容：简化背景动画 */
+  background-size: 200% 200%;
+}
+.bar .progress .shine.data-v-0b11ee78 {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+  /* 微信小程序兼容：保持光泽动画 */
+  animation: shine-0b11ee78 2s infinite;
+}
+
+/* 简化的渐变动画，确保小程序兼容 */
+@keyframes gradientMove-0b11ee78 {
+0%, 100% {
+    background-position: 0% 50%;
+}
+50% {
+    background-position: 100% 50%;
+}
+}
+@keyframes shine-0b11ee78 {
+0% {
+    left: -100%;
+}
+100% {
+    left: 200%;
+}
 }

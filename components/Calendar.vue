@@ -1,10 +1,10 @@
 <template>
   <view class="calendar">
     <!-- 日历头部：月份 + 年份 -->
-    <view class="calendar-head">
-      <view class="month-shower">{{ currentMonthName }}</view>
+    <view class="calendar-head glass-card">
+      <view class="month-shower">📅 {{ currentMonthName }}</view>
       <view class="year-picker">
-        <view class="year-shower">{{ currentYear }}</view>
+        <view class="year-shower">📆 {{ currentYear }}</view>
       </view>
     </view>
     <!-- 日历主体：星期 + 日期 -->
@@ -17,12 +17,15 @@
       <view class="days-shower">
         <!-- 前置空项（补全星期） -->
         <view class="empty" v-for="(_, idx) in emptyItems" :key="'empty-' + idx">  </view>
-        <!-- 日期项（根据 activeDays 高亮） -->
+        <!-- 日期项：今日样式 + 完成样式 区分显示 -->
         <view 
           class="item" 
           v-for="(date, idx) in monthDays" 
           :key="'date-' + idx"
-          :style="{ backgroundColor: activeDays.includes(date) ? 'antiquewhite' : '' }"
+          :class="{ 
+            'active-item': activeDays.includes(date), 
+            'today-item': isCurrentMonthToday && date === todayDay && !activeDays.includes(date)
+          }"
           @click="handleDateClick(date)"
         >
           {{ date }}
@@ -55,6 +58,16 @@ const currentYear = ref(currentDate.value.getFullYear()); // 当前年
 const currentMonth = ref(currentDate.value.getMonth()); // 当前月
 const emptyItems = ref([]); // 前置空项（补全星期）
 const monthDays = ref([]); // 当月所有日期
+
+// 新增：今日日期数据
+const todayDate = ref(new Date());
+const todayYear = computed(() => todayDate.value.getFullYear());
+const todayMonth = computed(() => todayDate.value.getMonth());
+const todayDay = computed(() => todayDate.value.getDate());
+// 判断：当前日历月份 是否为 今日所在月份
+const isCurrentMonthToday = computed(() => {
+  return currentYear.value === todayYear.value && currentMonth.value === todayMonth.value;
+});
 
 // 4. 计算当月天数（处理闰年）
 const getMonthDaysCount = (year, month) => {
@@ -94,53 +107,61 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-/* 页面背景（Uniapp 适配：rpx 单位 + 移除 vw/vh 改用 rpx 适配） */
-page {
-  margin: 200rpx 0; /* 原 100px → 200rpx */
-  padding: 0;
-  width: 750rpx; /* Uniapp 标准屏幕宽度基准 */
-  min-height: 100vh; /* 保留高度自适应 */
-  background: linear-gradient(to right bottom, purple, rgb(232, 116, 215));
+<style scoped lang="scss">
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+$glass-bg: rgba(255, 255, 255, 0.25);
+$glass-border: rgba(255, 255, 255, 0.3);
+$glass-bg-light: rgba(255, 255, 255, 0.18);
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 36rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
 }
 
-/* 日历容器（核心：px → rpx 换算） */
+/* 日历容器（完全透明，透出父页面渐变） */
 .calendar {
-  background-color: white;
-  width: 800rpx; /* 原 400px → 800rpx */
-  max-width: 750rpx; /* 限制最大宽度适配屏幕 */
-  height: 760rpx; /* 原 380px → 760rpx */
+  width: 100%;
+  max-width: 700rpx;
   margin: 0 auto;
-  padding: 40rpx; /* 原 20px → 40rpx */
-  border-radius: 40rpx; /* 原 20px → 40rpx */
-  box-shadow: 10rpx 20rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 10px 10px → 等比放大 */
+  padding: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
 }
 
 /* 日历头部 */
 .calendar-head {
   box-sizing: border-box;
-  background-color: blueviolet;
   width: 100%;
-  padding: 20rpx 40rpx; /* 原 10px 20px → 40rpx */
-  border-radius: 40rpx; /* 原 20px → 40rpx */
+  padding: 24rpx 40rpx;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   color: white;
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 30rpx; /* 原 15px → 30rpx */
-  box-shadow: 10rpx 10rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 5px 10px → 等比放大 */
+  font-size: 32rpx;
+  font-weight: 600;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .month-shower, .year-shower {
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.month-shower:hover, .year-shower:hover {
-  transform: scale(1.12); /* 缩放比例不变 */
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(1.08);
+  }
 }
 
 .year-picker {
@@ -148,7 +169,7 @@ page {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20rpx; /* 原 10px → 20rpx */
+  gap: 20rpx;
 }
 
 /* 日历主体 */
@@ -158,54 +179,83 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 40rpx; /* 原 20px → 40rpx */
-  padding: 20rpx 20rpx; /* 原 10px 10px → 20rpx */
+  gap: 24rpx;
+  padding: 0;
 }
 
 .days-list {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   place-items: center;
-  gap: 20rpx; /* 原 10px → 20rpx */
+  gap: 16rpx;
   width: 100%;
   box-sizing: border-box;
-  border: solid 2rpx rgb(140, 140, 140); /* 原 1px → 2rpx 适配高清屏 */
-  padding: 10rpx; /* 原 5px → 10rpx */
-  border-radius: 20rpx; /* 原 10px → 20rpx */
-  box-shadow: 10rpx 10rpx 20rpx rgba(0, 0, 0, 0.2); /* 原 5px 5px 10px → 等比放大 */
+  padding: 16rpx 10rpx;
+  border-radius: 30rpx;
+  background: $glass-bg-light;
+  border: 1px solid $glass-border;
 }
 
 .week-item {
-  padding: 10rpx; /* 原 5px → 10rpx */
-  border-radius: 10rpx; /* 原 5px → 10rpx */
-  font-size: 28rpx; /* 补充适配字体大小 */
+  padding: 12rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .days-shower {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   place-items: center;
-  gap: 20rpx; /* 原 10px → 20rpx */
+  gap: 16rpx;
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
-  padding: 10rpx; /* 原 5px → 10rpx */
+  padding: 10rpx;
 }
 
 .empty {
-  padding: 10rpx; /* 原 5px → 10rpx */
-  border-radius: 10rpx; /* 原 5px → 10rpx */
+  padding: 12rpx 16rpx;
+  border-radius: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  box-sizing: border-box;
 }
 
 .item {
-  padding: 10rpx; /* 原 5px → 10rpx */
-  border-radius: 10rpx; /* 原 5px → 10rpx */
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-size: 28rpx; /* 补充适配字体大小 */
+  padding: 12rpx 16rpx;
+  border-radius: 20rpx;
+  width: 60rpx;
+  height: 60rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 28rpx;
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  background: $glass-bg-light;
+  
+  &:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.3);
+  }
 }
 
-.item:hover {
-  background-color: antiquewhite;
+/* ========== 样式区分 ========== */
+/* 1. 今日日期：蓝色渐变（专属样式） */
+.today-item {
+  background: $secondary-gradient !important;
+  box-shadow: 0 8rpx 24rpx rgba(79, 172, 254, 0.4) !important;
+  font-weight: 700 !important;
+}
+/* 2. 完成日期：金色渐变（props传入） */
+.active-item {
+  background: $gold-gradient !important;
+  box-shadow: 0 8rpx 24rpx rgba(246, 211, 101, 0.4) !important;
+  font-weight: 700 !important;
 }
 </style>

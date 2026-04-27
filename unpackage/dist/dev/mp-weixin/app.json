@@ -10,7 +10,8 @@
     "pages/today/today",
     "pages/contract/contract",
     "pages/skill/skill",
-    "pages/emotion/emotion"
+    "pages/emotion/emotion",
+    "pages/test/test"
   ],
   "window": {
     "navigationBarTextStyle": "black",

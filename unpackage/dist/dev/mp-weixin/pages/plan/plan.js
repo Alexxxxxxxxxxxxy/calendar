@@ -4,7 +4,8 @@ const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "plan",
   setup(__props) {
-    const { continuous_day } = context_userContext.useUserContext();
+    context_userContext.useUserContextProvider();
+    const { continuous_day, token } = context_userContext.useUserContext();
     const continuous = common_vendor.ref(continuous_day || 0);
     const tasks = common_vendor.ref([
       {
@@ -12,20 +13,49 @@ const _sfc_main = {
         title: "高等数学",
         status: "正在进行",
         points: ["知识点1", "知识点2", "知识点3"]
-      },
-      {
-        id: 2,
-        title: "程序设计",
-        status: "",
-        points: ["知识点A", "知识点B", "知识点C"]
-      },
-      {
-        id: 3,
-        title: "线性代数",
-        status: "",
-        points: ["知识点A", "知识点B", "知识点C"]
       }
     ]);
+    const fetchData = () => {
+      if (!token.value) {
+        return;
+      }
+      common_vendor.index.showLoading({
+        title: "加载中...",
+        mask: true
+      });
+      common_vendor.index.request({
+        url: "http://106.53.182.241:8000/api/subjects/list",
+        method: "GET",
+        header: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
+        },
+        success: (res) => {
+          if (res.statusCode !== 200) {
+            common_vendor.index.showToast({
+              title: `接口异常 ${res.statusCode}`,
+              icon: "none",
+              duration: 2e3
+            });
+            return;
+          }
+          tasks.value = res.data.data.subjects;
+        },
+        fail: (err) => {
+          common_vendor.index.showToast({
+            title: err.errMsg || "网络请求失败",
+            icon: "none",
+            duration: 2e3
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
+        }
+      });
+    };
+    common_vendor.onShow(() => {
+      fetchData();
+    });
     const focusJump = () => {
       common_vendor.index.navigateTo({
         url: "/pages/focus/focus"
@@ -42,11 +72,16 @@ const _sfc_main = {
           }, task.status ? {
             c: common_vendor.t(task.status)
           } : {}, {
-            d: common_vendor.t(task.points[0]),
-            e: common_vendor.t(task.points[1]),
-            f: common_vendor.t(task.points[2]),
-            g: task.id
+            d: common_vendor.f(task.points, (point, index, i1) => {
+              return {
+                a: common_vendor.t(point),
+                b: index
+              };
+            }),
+            e: task.id
           });
+        }),
+        d: common_vendor.o(() => {
         })
       };
     };

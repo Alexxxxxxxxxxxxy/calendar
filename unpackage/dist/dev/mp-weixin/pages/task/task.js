@@ -1,9 +1,11 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const common_assets = require("../../common/assets.js");
+const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "task",
   setup(__props) {
+    context_userContext.useUserContext();
     const t = common_vendor.ref(0);
     const starts = Array.from({ length: 5 }, (_, i) => ({ id: i }));
     const handleStartClick = (index) => {
@@ -57,7 +59,7 @@ const _sfc_main = {
     const subject = common_vendor.ref("");
     const task = common_vendor.ref("");
     const taskid = common_vendor.ref("");
-    common_vendor.onLoad(() => {
+    common_vendor.onShow(() => {
       common_vendor.index.showLoading({
         title: "加载中...",
         mask: true
@@ -69,7 +71,6 @@ const _sfc_main = {
           "Content-Type": "application/json"
         },
         success: (res) => {
-          common_vendor.index.__f__("log", "at pages/task/task.vue:83", res.data.data);
           if (res.statusCode !== 200) {
             common_vendor.index.showToast({
               title: `接口异常 ${res.statusCode}`,

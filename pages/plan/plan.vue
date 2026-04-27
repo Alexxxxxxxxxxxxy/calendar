@@ -1,31 +1,68 @@
 <script setup>
 import { ref } from 'vue';
-import { useUserContext } from '../../context/userContext';
-const {continuous_day} = useUserContext()
+import { useUserContext, useUserContextProvider } from '../../context/userContext';
+import { onShow } from "@dcloudio/uni-app"
+useUserContextProvider()
+
+
+const {continuous_day , token} = useUserContext()
 
 const continuous = ref(continuous_day || 0)
 
 // 模拟任务数据
 const tasks = ref([
-  {
-    id: 1,
-    title: '高等数学',
-    status: '正在进行',
-    points: ['知识点1', '知识点2', '知识点3']
-  },
-  {
-    id: 2,
-    title: '程序设计',
-    status: '',
-    points: ['知识点A', '知识点B', '知识点C']
-  },
-  {
-    id: 3,
-    title: '线性代数',
-    status: '',
-    points: ['知识点A', '知识点B', '知识点C']
-  }
+	{
+	    id: 1,
+	    title: '高等数学',
+	    status: '正在进行',
+	    points: ['知识点1', '知识点2', '知识点3']
+	  },
 ]);
+
+const fetchData = ()=>{
+	if (!token.value) {
+	  return
+	}
+	
+	uni.showLoading({
+	  title: '加载中...',
+	  mask: true
+	})
+	
+	uni.request({
+	  url: "http://106.53.182.241:8000/api/subjects/list",
+	  method: 'GET',
+	  header: {
+	    "Content-Type": "application/json",
+	    "Authorization": "Bearer " + token.value,
+	  },
+	  success: (res) => {
+	    if (res.statusCode !== 200) {
+	      uni.showToast({
+	        title: `接口异常 ${res.statusCode}`,
+	        icon: "none",
+	        duration: 2000
+	      })
+	      return
+	    }
+		tasks.value = res.data.data.subjects
+	  },
+	  fail: (err) => {
+	    uni.showToast({
+	      title: err.errMsg || "网络请求失败",
+	      icon: "none",
+	      duration: 2000
+	    })
+	  },
+	  complete: () => {
+	    uni.hideLoading()
+	  }
+	})
+}
+
+onShow(()=>{
+	fetchData()
+})
 
 const focusJump = ()=>{
 	uni.navigateTo({
@@ -35,175 +72,227 @@ const focusJump = ()=>{
 </script>
 
 <template>
-  <view class="container">
-    <view class="status-section">
-      <view class="status-tag">状态</view>
-      <view class="streak-tag">坚持 第 {{continuous}} 天</view>
-    </view>
+  <view class="page-container">
+    <view class="content">
+      <!-- 顶部状态区 -->
+      <view class="status-section">
+        <view class="status-tag">🔥</view>
+        <view class="streak-tag">坚持 第 {{continuous}} 天</view>
+      </view>
 
-    <view class="timer-card">
-      <view class="timer-title">计时器</view>
-      <view class="focus-btn" @click="focusJump">进入专注界面</view>
-    </view>
+      <!-- 计时器卡片 -->
+      <view class="card">
+        <view class="card-title">⏱️ 专注计时器</view>
+        <view class="btn" @click="focusJump">进入专注界面</view>
+      </view>
 
-    <view class="task-section">
-      <view class="section-title">任务列表</view>
+      <!-- 任务列表 -->
+      <view class="section">
+        <view class="section-title">📋 今日任务</view>
 
-      <view class="task-item" v-for="task in tasks" :key="task.id">
-        <view class="task-header">
-          <view class="task-dot"></view>
-          <view class="task-title">{{ task.title }}</view>
-          <view class="task-status" v-if="task.status">{{ task.status }}</view>
-        </view>
+        <view class="task-card" v-for="task in tasks" :key="task.id">
+          <view class="task-header">
+            <view class="task-dot"></view>
+            <view class="task-name">{{ task.title }}</view>
+            <view class="task-state" v-if="task.status">{{ task.status }}</view>
+          </view>
 
-        <view class="points-list">
-          <view class="point-item">{{ task.points[0] }}</view>
-          <view class="point-item">{{ task.points[1] }}</view>
-          <view class="point-item">{{ task.points[2] }}</view>
+          <view class="task-points">
+			<view class="point" v-for="(point,index) in task.points" :key="index">
+				{{point}}
+			</view>
+          </view>
         </view>
       </view>
+
+      <!-- 完结按钮 -->
+      <view class="btn-container">
+        <view class="submit-btn" @click="">✅ 完结</view>
+      </view>
     </view>
-	<view style="display: flex; justify-content: center;"><button size="mini" class="over">完结</button></view>
   </view>
 </template>
 
-<style scoped lang="scss">
-$primary-color: #4a90e2;
-$primary-bg: #f9f9f9;
-$card-bg: #f0f0f0;
-$border-radius-sm: 8rpx;
-$border-radius-lg: 16rpx;
-$padding-base: 20rpx;
-$font-color-light: #666;
-
-.container {
-  padding: $padding-base;
-  background-color: $primary-bg;
-  min-height: 100vh;
+<style scoped>
+/* 微信小程序 page 样式 */
+:global(page) {
+  width: 100%;
+  min-height: 100%;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  margin: 0;
+  padding: 0;
 }
 
-/* --- 1. 顶部状态 --- */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+}
+
+.content {
+  width: 100%;
+}
+
+/* 顶部状态区 */
 .status-section {
   display: flex;
   align-items: center;
-  margin-bottom: $padding-base;
-  gap: 16rpx;
-
-  .status-tag,
-  .streak-tag {
-    background-color: $card-bg;
-    padding: 6rpx 16rpx;
-    border-radius: $border-radius-sm;
-    font-size: 28rpx;
-    margin-right: 20rpx;
-    color: #333;
-  }
-  .status-tag{
-	  border-radius: 100%;
-	  padding: 16rpx;
-  }
+  margin-bottom: 40rpx;
 }
 
-/* --- 2. 计时器卡片 --- */
-.timer-card {
-  background-color: $card-bg;
-  border-radius: $border-radius-lg;
-  padding: $padding-base;
-  margin-bottom: $padding-base;
+.status-tag {
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-right: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.streak-tag {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  padding: 20rpx 48rpx;
+  border-radius: 100rpx;
+  font-size: 30rpx;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(79, 172, 254, 0.3);
+}
+
+/* 通用卡片样式 */
+.card {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 40rpx;
+  padding: 50rpx 40rpx;
+  margin-bottom: 40rpx;
   position: relative;
-  min-height: 8rem;
-
-  .timer-title {
-    font-size: 36rpx;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 40rpx;
-    color: #333;
-  }
-
-  .focus-btn {
-    position: absolute;
-    bottom: $padding-base;
-    right: $padding-base;
-    background-color: #e0e0e0;
-    padding: 6rpx 20rpx;
-    border-radius: 12rpx;
-    font-size: 24rpx;
-    color: #333;
-  }
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-/* --- 3. 任务列表 --- */
-.task-section {
-  overflow-y: scroll;
-  max-height: 30rem;
-  .section-title {
-    background-color: #e0e0e0;
-    display: inline-block;
-    padding: 6rpx 20rpx;
-    border-radius: 12rpx;
-    font-size: 28rpx;
-    font-weight: bold;
-    margin-bottom: 20rpx;
-    color: #333;
-  }
-
-  .task-item {
-    background-color: #fff; // 任务卡片背景为白，更突出
-    border-radius: $border-radius-lg;
-    padding: $padding-base;
-    margin-bottom: 20rpx;
-    box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.05);
-
-    .task-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16rpx;
-
-      .task-dot {
-        width: 30rpx;
-        height: 30rpx;
-        background-color: #e0e0e0;
-        border-radius: 50%;
-        margin-right: 16rpx;
-      }
-
-      .task-title {
-        font-size: 32rpx;
-        font-weight: bold;
-        flex: 1;
-        color: #333;
-      }
-
-      .task-status {
-        background-color: #e0e0e0;
-        padding: 4rpx 12rpx;
-        border-radius: 12rpx;
-        font-size: 24rpx;
-        color: #333;
-      }
-    }
-
-    .points-list {
-      .point-item {
-        background-color: $card-bg;
-        height: 36rpx;
-        border-radius: 18rpx;
-        margin-bottom: 12rpx;
-		padding: 10rpx;
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
+.card-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 70rpx;
+  color: white;
+  text-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
 }
-.over{
-	margin-top: 1rem;
-	border: none;
-	background-color: $primary-color;
-	&:hover{
-		background-color: darken($color: $primary-color, $amount: 10%);
-	}
+
+.btn {
+  position: absolute;
+  bottom: 40rpx;
+  right: 40rpx;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  padding: 20rpx 48rpx;
+  border-radius: 100rpx;
+  font-size: 28rpx;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(246, 211, 101, 0.35);
+}
+
+/* 任务区域 */
+.section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  background: rgba(255, 255, 255, 0.25);
+  display: inline-block;
+  padding: 20rpx 48rpx;
+  border-radius: 100rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.task-card {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 36rpx;
+  padding: 40rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.task-dot {
+  width: 28rpx;
+  height: 28rpx;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  border-radius: 50%;
+  margin-right: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(246, 211, 101, 0.4);
+}
+
+.task-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  flex: 1;
+  color: white;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.task-state {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  padding: 10rpx 28rpx;
+  border-radius: 100rpx;
+  font-size: 24rpx;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4rpx 12rpx rgba(79, 172, 254, 0.3);
+}
+
+.task-points {
+  margin-top: 12rpx;
+}
+
+.point {
+  background: rgba(255, 255, 255, 0.25);
+  min-height: 72rpx;
+  border-radius: 36rpx;
+  margin-bottom: 18rpx;
+  padding: 20rpx 32rpx;
+  font-size: 28rpx;
+  color: white;
+  line-height: 1.5;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.point:last-child {
+  margin-bottom: 0;
+}
+
+/* 按钮容器 */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30rpx;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24rpx 80rpx;
+  border-radius: 100rpx;
+  font-size: 30rpx;
+  color: white;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12rpx 40rpx rgba(102, 126, 234, 0.4);
 }
 </style>

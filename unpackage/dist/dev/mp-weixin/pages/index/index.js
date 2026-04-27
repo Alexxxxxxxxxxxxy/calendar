@@ -13,9 +13,13 @@ const _sfc_main = {
     const coin = common_vendor.ref(common_assets.coinImg);
     const continuousDay = common_vendor.ref(0);
     const currency = common_vendor.ref(0);
-    const progress = common_vendor.ref(50);
-    const { continuous_day, updateContinuousDay, updateProgress } = context_userContext.useUserContext();
-    common_vendor.onLoad(() => {
+    const progress = common_vendor.ref(0);
+    context_userContext.useUserContextProvider();
+    const { token, updateContinuousDay, updateProgress } = context_userContext.useUserContext();
+    const fetchHomeData = () => {
+      if (!token.value) {
+        return;
+      }
       common_vendor.index.showLoading({
         title: "加载中...",
         mask: true
@@ -24,7 +28,8 @@ const _sfc_main = {
         url: "http://106.53.182.241:8000/api/index/home_data",
         method: "GET",
         header: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
         },
         success: (res) => {
           if (res.statusCode !== 200) {
@@ -52,6 +57,37 @@ const _sfc_main = {
           common_vendor.index.hideLoading();
         }
       });
+    };
+    const handleLoginSuccess = () => {
+      setTimeout(() => {
+        fetchHomeData();
+      }, 300);
+    };
+    common_vendor.onMounted(() => {
+      common_vendor.index.$on("loginSuccess", handleLoginSuccess);
+    });
+    common_vendor.onUnmounted(() => {
+      common_vendor.index.$off("loginSuccess", handleLoginSuccess);
+    });
+    common_vendor.onLoad(() => {
+      if (token.value) {
+        fetchHomeData();
+      } else {
+        return;
+      }
+    });
+    common_vendor.onShow(() => {
+      if (token.value) {
+        fetchHomeData();
+      }
+    });
+    common_vendor.onHide(() => {
+    });
+    common_vendor.watch(token, (newVal, oldVal) => {
+      common_vendor.index.__f__("log", "at pages/index/index.vue:98", "token watch 触发:", newVal ? "有token" : "无token");
+      if (newVal && !oldVal) {
+        fetchHomeData();
+      }
     });
     const achiveJump = () => {
       common_vendor.index.navigateTo({
@@ -81,18 +117,19 @@ const _sfc_main = {
     return (_ctx, _cache) => {
       return {
         a: img.value,
-        b: coin.value,
-        c: common_vendor.t(currency.value),
-        d: common_vendor.p({
+        b: common_vendor.t(continuousDay.value),
+        c: coin.value,
+        d: common_vendor.t(currency.value),
+        e: common_vendor.t(progress.value),
+        f: common_vendor.p({
           width: progress.value + "%"
         }),
-        e: common_vendor.t(progress.value),
-        f: common_vendor.o(contractJump),
-        g: common_vendor.t(continuousDay.value),
-        h: common_vendor.o(taskJump),
-        i: common_vendor.o(todayJump),
-        j: common_vendor.o(achiveJump),
-        k: common_vendor.o(skillJump)
+        g: common_vendor.o(contractJump),
+        h: common_vendor.t(continuousDay.value),
+        i: common_vendor.o(taskJump),
+        j: common_vendor.o(todayJump),
+        k: common_vendor.o(achiveJump),
+        l: common_vendor.o(skillJump)
       };
     };
   }

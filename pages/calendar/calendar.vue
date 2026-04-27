@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref,watch } from 'vue';
 
 import Progress from "@/components/Progress.vue"
 import NewClass from "@/components/NewClass.vue"
@@ -82,108 +82,159 @@ const handleClose = ()=>{
 	<view class="form" v-if="show">
 		<NewClass @close="handleClose"></NewClass>
 	</view>
-	<view class="main">
-		<view class="header">
-			<view class="title">连续打卡{{continuous}}天</view>
-			<view class="add" @click="handleClick">+</view>
-		</view>
-		<view class="calendar-wrapper"><Calendar ></Calendar></view>
-		<view class="time">
-			<view class="date">
-				{{year}}年{{month}}月{{day}}日
+	<view class="page-container">
+		<view class="main">
+			<view class="header">
+				<view class="title glass-card">🔥 连续打卡{{continuous}}天</view>
+				<view class="add glass-card" @click="handleClick">+</view>
 			</view>
-			<view class="info">学习时长：{{study}}h</view>
-			<view class="info">完成率：{{rate}}%</view>
-			<view class="info">学习状态：</view>
+			<view class="calendar-wrapper glass-card"><Calendar ></Calendar></view>
+			<view class="time glass-card">
+				<view class="date">📅 {{year}}年{{month}}月{{day}}日</view>
+				<view class="info">⏱️ 学习时长：{{study}}h</view>
+				<view class="info">📊 完成率：{{rate}}%</view>
+				<view class="info">💪 学习状态：✨ 继续加油</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <style scoped lang="scss">
-$background-light: #f5f5f5;
-$background-dark: #e0e0e0;
-.page{
-	margin: 0;
-	padding: 0;
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+$glass-bg: rgba(255, 255, 255, 0.25);
+$glass-border: rgba(255, 255, 255, 0.3);
+$glass-bg-light: rgba(255, 255, 255, 0.18);
+
+/* ========================================
+   微信小程序背景修复（仅修改此处）
+   ======================================== */
+/* 第1重：纯色兜底，小程序必显示 */
+page {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #667eea;
+  margin: 0;
+  padding: 0;
 }
+/* 第2重：渐变主背景，使用小程序兼容语法 to bottom */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+}
+
 .form{
 	margin: 0;
 	position: fixed;
+	top: 0;
+	left: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 5;
-	background-color: whitesmoke;
+	z-index: 999;
+	background-color: rgba(0, 0, 0, 0.5);
 	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
+
 .main{
-	margin-top: 1rem;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	box-sizing: border-box;
+	gap: 30rpx;
 }
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 36rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
 .header{
-	margin:0.5rem;
-	margin-top: 1rem;
-	padding: 0.5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	box-sizing: border-box;
+	gap: 20rpx;
+	
 	.title{
-		font-size: 1.1rem;
-		background-color: $background-light;
-		padding: 0.3rem 1.5rem;
-		border-radius: 0.5rem;
-		box-sizing: border-box;
+		flex: 1;
+		font-size: 32rpx;
+		font-weight: bold;
+		color: white;
+		padding: 20rpx 40rpx;
+		text-align: center;
+		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 	}
+	
 	.add{
-		width: 2rem;
-		height: 2rem;
+		width: 100rpx;
+		height: 100rpx;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-size: 1.7rem;
-		border-radius: 100%;
-		background-color: $background-light;
-		padding: 1rem;
-		box-sizing: border-box;
-		&:hover{
-			background-color: gray;
-			transition:all;
-			transition-duration: 500ms;
+		font-size: 60rpx;
+		line-height: 1;
+		color: white;
+		font-weight: 300;
+		background: $gold-gradient;
+		box-shadow: 0 8rpx 24rpx rgba(246, 211, 101, 0.35);
+		
+		&:active{
+			transform: scale(0.95);
+			background: rgba(255, 255, 255, 0.35);
 		}
 	}
 }
+
 .calendar-wrapper{
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
 	justify-content: center;
-	transform: scale(0.95);
+	padding: 30rpx 20rpx;
+	background: $glass-bg-light;
 }
+
 .time{
-	margin: 1rem;
-	padding: 0.5rem 1rem;
-	gap: 0.5rem;
-	background-color: $background-dark;
-	border-radius: 0.5rem;
+	padding: 40rpx;
+	gap: 24rpx;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
+	
 	.date{
-		background-color: $background-light;
-		width: 45%;
-		padding: 0.2rem 0.5rem;
+		background: $secondary-gradient;
+		width: fit-content;
+		padding: 12rpx 32rpx;
 		text-align: center;
-		border-radius: 0.3rem;
-		font-size: 1rem;
-		box-sizing: border-box;
+		border-radius: 100rpx;
+		font-size: 28rpx;
+		color: white;
+		font-weight: 600;
+		box-shadow: 0 4rpx 12rpx rgba(79, 172, 254, 0.3);
 	}
+	
 	.info{
-		font-size: 1rem;
-		box-sizing: border-box;
+		font-size: 30rpx;
+		color: white;
+		font-weight: 500;
+		text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 	}
 }
 </style>

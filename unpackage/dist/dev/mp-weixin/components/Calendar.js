@@ -18,6 +18,13 @@ const _sfc_main = {
     const currentMonth = common_vendor.ref(currentDate.value.getMonth());
     const emptyItems = common_vendor.ref([]);
     const monthDays = common_vendor.ref([]);
+    const todayDate = common_vendor.ref(/* @__PURE__ */ new Date());
+    const todayYear = common_vendor.computed(() => todayDate.value.getFullYear());
+    const todayMonth = common_vendor.computed(() => todayDate.value.getMonth());
+    const todayDay = common_vendor.computed(() => todayDate.value.getDate());
+    const isCurrentMonthToday = common_vendor.computed(() => {
+      return currentYear.value === todayYear.value && currentMonth.value === todayMonth.value;
+    });
     const getMonthDaysCount = (year, month) => {
       const dayCount = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       if (year % 4 === 0 && year % 100 !== 0 || year % 400 === 0) {
@@ -58,8 +65,9 @@ const _sfc_main = {
           return {
             a: common_vendor.t(date),
             b: "date-" + idx,
-            c: __props.activeDays.includes(date) ? "antiquewhite" : "",
-            d: common_vendor.o(($event) => handleDateClick(), "date-" + idx)
+            c: __props.activeDays.includes(date) ? 1 : "",
+            d: isCurrentMonthToday.value && date === todayDay.value && !__props.activeDays.includes(date) ? 1 : "",
+            e: common_vendor.o(($event) => handleDateClick(), "date-" + idx)
           };
         })
       };

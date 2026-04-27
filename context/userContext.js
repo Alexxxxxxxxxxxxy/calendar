@@ -1,41 +1,70 @@
 // context/user.js
 import { ref, provide, inject } from 'vue'
 
-// 定义注入key，保证唯一性，对标React的Context实例
 export const UserContextKey = Symbol('userContext')
 
-// 封装Provider逻辑，复用更方便，对标Context.Provider
+// 全局单例状态，确保所有组件共享同一个 ref
+const globalToken = ref(uni.getStorageSync('token') || "")
+const globalContinuousDay = ref(0)
+const globalProgress = ref(0)
+const globalIsVip = ref(false)
+const globalCoins = ref(0)
+const globalName = ref("")
+
 export const useUserContextProvider = () => {
-  // 必须用ref/reactive包裹，才能实现响应式更新
-  const token = ref("")
-  const continuous_day = ref(0)
-  const progress = ref(0)
   const updateToken = (tokens) => {
-    token.value = tokens
-  }
-  const updateContinuousDay = (day)=>{
-	  continuous_day.value = day
-  }
-  const updateProgress = (val)=>{
-	  progress.value = val
+    globalToken.value = tokens
+    uni.setStorageSync('token', tokens)
   }
 
-  // 向后代组件提供上下文
+  const updateContinuousDay = (day) => {
+    globalContinuousDay.value = day
+  }
+  const updateProgress = (val) => {
+    globalProgress.value = val
+  }
+  const updateVip = (val) => {
+    globalIsVip.value = val
+  }
+  const updateCoins = (val) => {
+    globalCoins.value = val
+  }
+  const updateName = (val)=>{
+	  globalName.value = val
+  }
+
   provide(UserContextKey, {
-    token,
+    token: globalToken,
     updateToken,
-	continuous_day,
-	updateContinuousDay,
-	progress,
-	updateProgress
+    continuous_day: globalContinuousDay,
+    updateContinuousDay,
+    progress: globalProgress,
+    updateProgress,
+    is_vip: globalIsVip,
+    updateVip,
+    coins: globalCoins,
+    updateCoins,
+	UserName:globalName,
+	updateName
   })
-  return { token, updateToken, continuous_day, updateContinuousDay, progress, updateProgress }
+  return {
+    token: globalToken,
+    updateToken,
+    continuous_day: globalContinuousDay,
+    updateContinuousDay,
+    progress: globalProgress,
+    updateProgress,
+    is_vip: globalIsVip,
+    updateVip,
+    coins: globalCoins,
+    updateCoins,
+	UserName:globalName,
+	updateName
+  }
 }
 
-// 封装消费hook，对标React的useContext
 export const useUserContext = () => {
   const context = inject(UserContextKey)
-  // 兜底校验，避免在Provider外使用
   if (!context) {
     throw new Error('useUserContext 必须在 UserContextProvider 内使用')
   }

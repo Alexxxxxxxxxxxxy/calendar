@@ -64,10 +64,11 @@ const _sfc_main = {
         a: common_vendor.t(subjectInfo.value.title),
         b: common_vendor.t(subjectInfo.value.duration),
         c: common_vendor.t(timerDisplay.value),
-        d: common_vendor.o(handleClick),
-        e: common_vendor.t(statusText.value),
-        f: common_vendor.o(emotionJump),
-        g: common_vendor.o(skillJump)
+        d: common_vendor.t(paused.value ? "点击开始" : "点击暂停"),
+        e: common_vendor.o(handleClick),
+        f: common_vendor.t(statusText.value),
+        g: common_vendor.o(emotionJump),
+        h: common_vendor.o(skillJump)
       };
     };
   }

@@ -6937,9 +6937,9 @@ function isConsoleWritable() {
   return isWritable;
 }
 function initRuntimeSocketService() {
-  const hosts = "192.168.56.1,172.26.115.11,127.0.0.1";
+  const hosts = "192.168.56.1,172.19.40.206,127.0.0.1";
   const port = "8090";
-  const id = "mp-weixin_bDRMhg";
+  const id = "mp-weixin_k98N5L";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -7888,6 +7888,11 @@ const createSubpackageApp = initCreateSubpackageApp();
 const createLifeCycleHook = (lifecycle, flag = 0) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
+const onShow = /* @__PURE__ */ createLifeCycleHook(
+  ON_SHOW,
+  1 | 2
+  /* HookFlags.PAGE */
+);
 const onHide = /* @__PURE__ */ createLifeCycleHook(
   ON_HIDE,
   1 | 2
@@ -7909,10 +7914,13 @@ exports.o = o;
 exports.onHide = onHide;
 exports.onLoad = onLoad;
 exports.onMounted = onMounted;
+exports.onShow = onShow;
+exports.onUnmounted = onUnmounted;
 exports.p = p;
 exports.provide = provide;
 exports.ref = ref;
 exports.t = t;
 exports.unref = unref;
+exports.watch = watch;
 exports.wx$1 = wx$1;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

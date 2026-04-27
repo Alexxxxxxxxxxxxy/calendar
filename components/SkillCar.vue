@@ -7,72 +7,130 @@ const props = defineProps({
 	num:{
 		type:Number,
 		required:true
+	},
+	color:{
+		type:String,
+		default:"#667eea"
 	}
 })
 </script>
 
 <template>
-	<view class="main">
-		<view class="star">
-			<text class="tag">{{props.text}}</text>
+	<view class="main glass-card">
+		<view class="card-left">
+			<view class="star-badge" :style="{'background-color': props.color}">
+				<view class="star-icon">⭐</view>
+			</view>
+			<view class="card-info">
+				<view class="card-name">{{props.text}}</view>
+				<view class="card-desc">学习助力道具</view>
+			</view>
 		</view>
-		<view class="storage">
-			<view class="num">X{{props.num}}</view>
-			<view class="more">添加更多</view>
+		
+		<view class="card-right">
+			<view class="storage-display">
+				<view class="storage-num">× {{props.num}}</view>
+			</view>
+			<view class="action-btn">
+				<text class="action-text">使用</text>
+			</view>
 		</view>
 	</view>
 </template>
 
-
 <style scoped lang="scss">
-$background-light: #f5f5f5;
-page{
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+$glass-bg: rgba(255, 255, 255, 0.3);
+$glass-border: rgba(255, 255, 255, 0.35);
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
 }
-.main{
+
+.main {
 	width: 100%;
-	background-color: white;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
-	border-radius: 0.5rem;
-	padding: 0.5rem;
+	padding: 1.2rem;
 }
-.star {
-	box-sizing: border-box;
+
+.card-left {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+/* 星形徽章 */
+.star-badge {
+	width: 4rem;
+	height: 4rem;
+	border-radius: 50%;
+	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* 星形大小 */
-	width: 150rpx;
-	height: 150rpx;
-	/* 星形颜色 */
-	background: gold;
-	/* 核心：裁剪成五角星形状（固定坐标，直接用） */
-	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-	.tag{
-		font-size: 0.8rem;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	position: relative;
+	
+	.star-icon {
+		font-size: 2rem;
 	}
 }
-.storage{
-	box-sizing: border-box;
+
+.card-info {
 	display: flex;
 	flex-direction: column;
-	gap: 0.2rem;
-	justify-content: center;
-	align-items: center;
-	.more{
-		background-color: $background-light;
-		padding: 0.2rem 0.5rem;
-		border-radius: 10%;
-		&:hover{
-			background-color: darken($background-light, 10%);
-		}
+	gap: 0.3rem;
+	
+	.card-name {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: white;
+	}
+	
+	.card-desc {
+		font-size: 0.8rem;
+		color: rgba(255, 255, 255, 0.7);
+	}
+}
+
+.card-right {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	align-items: flex-end;
+}
+
+.storage-display {
+	.storage-num {
+		font-size: 1.3rem;
+		font-weight: 700;
+		color: white;
+	}
+}
+
+.action-btn {
+	padding: 0.4rem 1rem;
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 2rem;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	
+	.action-text {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: white;
 	}
 }
 </style>

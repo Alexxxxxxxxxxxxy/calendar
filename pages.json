@@ -65,6 +65,12 @@
 			"style": {
 				"navigationBarTitleText": "情绪"
 			}
+		},
+		{
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": ""
+			}
 		}
 	],
 	"globalStyle": {

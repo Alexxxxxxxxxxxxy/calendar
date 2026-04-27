@@ -10,14 +10,19 @@ const _sfc_main = {
     num: {
       type: Number,
       required: true
+    },
+    color: {
+      type: String,
+      default: "#667eea"
     }
   },
   setup(__props) {
     const props = __props;
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(props.text),
-        b: common_vendor.t(props.num)
+        a: props.color,
+        b: common_vendor.t(props.text),
+        c: common_vendor.t(props.num)
       };
     };
   }

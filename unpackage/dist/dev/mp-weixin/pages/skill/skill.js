@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const context_userContext = require("../../context/userContext.js");
 if (!Math) {
   SkillCar();
 }
@@ -7,10 +8,12 @@ const SkillCar = () => "../../components/SkillCar.js";
 const _sfc_main = {
   __name: "skill",
   setup(__props) {
+    context_userContext.useUserContextProvider();
+    const { token, updateContinuousDay, updateProgress } = context_userContext.useUserContext();
     const incre = common_vendor.ref(0);
     const replace = common_vendor.ref(0);
     const remit = common_vendor.ref(0);
-    common_vendor.onLoad(() => {
+    common_vendor.onShow(() => {
       common_vendor.index.showLoading({
         title: "加载中...",
         mask: true
@@ -19,7 +22,8 @@ const _sfc_main = {
         url: "http://106.53.182.241:8000/api/client/bag",
         method: "GET",
         header: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
         },
         success: (res) => {
           if (res.statusCode != 200) {
@@ -50,15 +54,18 @@ const _sfc_main = {
       return {
         a: common_vendor.p({
           text: "减负卡",
-          num: incre.value
+          num: incre.value,
+          color: "#667eea"
         }),
         b: common_vendor.p({
           text: "重排卡",
-          num: replace.value
+          num: replace.value,
+          color: "#f093fb"
         }),
         c: common_vendor.p({
           text: "免罚卡",
-          num: remit.value
+          num: remit.value,
+          color: "#f6d365"
         })
       };
     };

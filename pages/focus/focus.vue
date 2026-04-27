@@ -78,63 +78,92 @@ const emotionJump = ()=>{
 </script>
 
 <template>
-  <view class="container">
-    <!-- 1. 顶部信息栏 -->
-    <view class="top-info">
-      <view class="info-tag">
-        <text class="subject">{{ subjectInfo.title }}</text>
-        <text class="time-length">{{ subjectInfo.duration }}</text>
-      </view>
-    </view>
-
-    <!-- 2. 中间核心计时器 -->
-    <view class="timer-section" @click="handleClick">
-      <view class="timer-circle">
-        <view class="timer-label">计时器</view>
-        <view class="timer-number">{{ timerDisplay }}</view>
-      </view>
-    </view>
-
-    <!-- 3. 底部功能区 -->
-    <view class="bottom-actions">
-      <!-- 左侧状态 -->
-      <view class="status-group">
-        <view style="display: flex;align-items: center; gap: 30rpx;">
-          <view class="status-tag">{{ statusText }}</view>
+  <view class="page-container">
+    <view class="container">
+      <!-- 1. 顶部信息栏 -->
+      <view class="top-info">
+        <view class="info-tag glass-card">
+          <text class="subject">{{ subjectInfo.title }}</text>
+          <text class="time-length">{{ subjectInfo.duration }}</text>
         </view>
-        <view class="status-tag">返回</view>
       </view>
 
-      <!-- 右侧按钮组 -->
-      <view class="button-group">
-        <view class="action-btn" @click="emotionJump">情绪反馈</view>
-        <view class="action-btn" @click="skillJump">技能卡</view>
-        <view class="action-btn">确认完成</view>
+      <!-- 2. 中间核心计时器 -->
+      <view class="timer-section" @click="handleClick">
+        <view class="timer-circle glass-card">
+          <view class="timer-label">⏱️ 计时器</view>
+          <view class="timer-number">{{ timerDisplay }}</view>
+          <view class="timer-hint">{{ paused ? '点击开始' : '点击暂停' }}</view>
+        </view>
+      </view>
+
+      <!-- 3. 底部功能区 -->
+      <view class="bottom-actions">
+        <!-- 左侧状态 -->
+        <view class="status-group">
+          <view class="status-tag glass-card">{{ statusText }}</view>
+          <view class="status-tag glass-card">返回</view>
+        </view>
+
+        <!-- 右侧按钮组 -->
+        <view class="button-group">
+          <view class="action-btn" @click="emotionJump">情绪反馈</view>
+          <view class="action-btn" @click="skillJump">技能卡</view>
+          <view class="action-btn confirm-btn">确认完成</view>
+        </view>
       </view>
     </view>
   </view>
 </template>
 
 <style scoped lang="scss">
-$bg-color: #f5f5f5;
-$card-color: #e0e0e0;
-$text-color: #333;
-$primary-color: #007AFF;
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+$gold-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+$glass-bg: rgba(255, 255, 255, 0.25);
+$glass-border: rgba(255, 255, 255, 0.3);
+
+/* 微信小程序兼容背景 - 三重保障 */
+page {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #667eea; /* 纯色兜底 */
+  margin: 0;
+  padding: 0;
+}
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%); /* 兼容小程序渐变 */
+}
 
 .container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 40rpx; // 20px * 2
+  padding: 40rpx 30rpx;
   box-sizing: border-box;
-  background-color: #ffffff;
+}
+
+/* 微信小程序兼容的毛玻璃卡片 */
+.glass-card {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 36rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  position: relative;
+  z-index: 1;
 }
 
 /* 1. 顶部信息样式 */
 .top-info {
   display: flex;
   justify-content: center;
-  margin-bottom: 60rpx; // 30px * 2
+  margin-bottom: 60rpx;
 }
 
 .info-tag {
@@ -142,21 +171,21 @@ $primary-color: #007AFF;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 16rpx 30rpx; // 8px/15px * 2
-  background-color: $card-color;
-  border-radius: 30rpx; // 15px * 2
-  font-size: 28rpx; // 14px * 2
-  color: $text-color;
+  padding: 30rpx 50rpx;
+  font-size: 28rpx;
 }
 
 .subject {
   font-weight: bold;
-  margin-bottom: 4rpx; // 2px * 2
+  margin-bottom: 12rpx;
+  color: white;
+  font-size: 32rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .time-length {
-  font-size: 24rpx; // 12px * 2
-  color: #555;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* 2. 中间计时器样式 */
@@ -168,28 +197,40 @@ $primary-color: #007AFF;
 }
 
 .timer-circle {
-  width: 480rpx; // 240px * 2
-  height: 480rpx; // 240px * 2
-  background-color: $card-color;
+  width: 520rpx;
+  height: 520rpx;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .timer-label {
-  font-size: 32rpx; // 16px * 2
-  color: #555;
-  margin-bottom: 20rpx; // 10px * 2
+  font-size: 32rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 20rpx;
+  font-weight: 600;
 }
 
 .timer-number {
-  font-size: 96rpx; // 48px * 2
+  font-size: 100rpx;
   font-weight: bold;
-  color: #333;
+  color: white;
   font-family: 'DIN Alternate', 'Arial', sans-serif;
+  text-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+  letter-spacing: 4rpx;
+}
+
+.timer-hint {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20rpx;
 }
 
 /* 3. 底部操作区样式 */
@@ -198,8 +239,9 @@ $primary-color: #007AFF;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20rpx; // 10px * 2
-  padding-top: 20rpx; // 10px * 2
+  gap: 30rpx;
+  padding-top: 20rpx;
+  padding-bottom: 40rpx;
 }
 
 .status-group {
@@ -207,36 +249,47 @@ $primary-color: #007AFF;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10rpx; // 5px * 2
+  gap: 20rpx;
 }
 
 .status-tag {
-  background-color: $card-color;
-  padding: 8rpx 16rpx; // 4px/8px * 2
-  border-radius: 20rpx; // 10px * 2
-  font-size: 30rpx; // 15px * 2
-  color: #555;
+  padding: 16rpx 32rpx;
+  font-size: 28rpx;
+  color: white;
+  font-weight: 600;
 }
 
 .button-group {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  gap: 20rpx; // 10px * 2
+  gap: 20rpx;
 }
 
 .action-btn {
-  width: 160rpx; // 80px * 2
-  padding: 20rpx 0; // 10px * 2 (上下留白增加)
-  background-color: $card-color;
-  border-radius: 24rpx; // 12px * 2 (圆角增加)
+  flex: 1;
+  padding: 24rpx 16rpx;
+  background: $secondary-gradient;
+  border-radius: 30rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 28rpx; // 14px * 2
-  color: #333;
+  font-size: 26rpx;
+  color: white;
   text-align: center;
-  line-height: 1.5; // 增加行高，防止文字太挤
+  line-height: 1.5;
+  font-weight: 600;
+  box-shadow: 0 8rpx 24rpx rgba(79, 172, 254, 0.3);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.confirm-btn {
+  background: $gold-gradient;
+  box-shadow: 0 8rpx 24rpx rgba(246, 211, 101, 0.35);
 }
 </style>
