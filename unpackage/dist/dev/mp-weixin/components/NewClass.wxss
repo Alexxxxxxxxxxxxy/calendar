@@ -120,6 +120,8 @@
   color: #2d3748;
   margin-bottom: 15rpx;
 }
+
+/* 修复微信小程序placeholder上移问题 - 仅修改此处 */
 .form-input.data-v-fb8db99d {
   width: 100%;
   padding: 20rpx 25rpx;
@@ -128,8 +130,12 @@
   background: #ffffff;
   font-size: 26rpx;
   color: #2d3748;
+  line-height: 1.2;
+  min-height: 70rpx;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 .form-input.data-v-fb8db99d:focus {
   outline: none;
@@ -138,9 +144,15 @@
 }
 .form-input.data-v-fb8db99d::-webkit-input-placeholder {
   color: #a0aec0;
+  font-size: 24rpx;
+  line-height: 1.2;
+  vertical-align: middle;
 }
 .form-input.data-v-fb8db99d::placeholder {
   color: #a0aec0;
+  font-size: 24rpx;
+  line-height: 1.2;
+  vertical-align: middle;
 }
 .form-row.data-v-fb8db99d {
   display: flex;

@@ -376,6 +376,7 @@ $text-light: #a0aec0;
   margin-bottom: 15rpx;
 }
 
+/* 修复微信小程序placeholder上移问题 - 仅修改此处 */
 .form-input {
   width: 100%;
   padding: 20rpx 25rpx;
@@ -384,8 +385,12 @@ $text-light: #a0aec0;
   background: #ffffff;
   font-size: 26rpx;
   color: $text-primary;
+  line-height: 1.2;
+  min-height: 70rpx;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
   
   &:focus {
     outline: none;
@@ -395,6 +400,9 @@ $text-light: #a0aec0;
   
   &::placeholder {
     color: $text-light;
+    font-size: 24rpx;
+    line-height: 1.2;
+    vertical-align: middle;
   }
 }
 
