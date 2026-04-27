@@ -67,9 +67,9 @@ const timeStr = computed(()=>{
   return `${hh}:${mm}:${ss}`;
 })
 
-const subject = ref("")
-const task = ref("")
-const taskid = ref("")
+const subject = ref("科目")
+const task = ref("任务")
+const taskid = ref("0")
 // 网络请求
 onShow(()=>{
 	uni.showLoading({
@@ -81,6 +81,7 @@ onShow(()=>{
 		method:"GET",
 		header:{
 			"Content-Type": "application/json",
+			"Authorization": "Bearer " + token.value,
 		},
 		success:(res)=>{
 			if(res.statusCode !== 200){
@@ -91,9 +92,9 @@ onShow(()=>{
 				})
 				return
 			}
-			subject.value = res.data.data.subject_name
-			task.value = res.data.data.sub_knowledge
-			taskid.value = res.data.data.task_id
+			// subject.value = res.data.data.subject_name || "科目"
+			// task.value = res.data.data.sub_knowledge || "任务"
+			// taskid.value = res.data.data.task_id || ""
 		},
 		fail:(err)=>{
 			uni.showToast({
@@ -108,9 +109,48 @@ onShow(()=>{
 	})
 })
 
-const planJump = ()=>{
-	uni.navigateTo({
-		url:"/pages/plan/plan"
+
+const handleSubmit = () => {
+	uni.showLoading({
+	  title: '加载中...',
+	  mask: true
+	})
+	uni.request({
+		url:"http://106.53.182.241:8000/api/task/trial_feedback",
+		method:"POST",
+		header:{
+			"Content-Type": "application/json",
+			"Authorization": "Bearer " + token.value,
+		},
+		data:{
+			task_id:taskid.value,
+			elapsed_seconds:s.value+m.value*60+h.value*60*60,
+			completion_stars:t.value,
+			status_assessment:""+n.value,
+		},
+		success:(res)=>{
+			if(res.statusCode !== 200){
+				uni.showToast({
+				  title: `接口异常 ${res.statusCode}`,
+				  icon: "none", 
+				  duration: 2000
+				})
+				return
+			}
+			uni.navigateTo({
+				url:"/pages/plan/plan"
+			})
+		},
+		fail:(err)=>{
+			uni.showToast({
+			  title: err.errMsg || "网络请求失败",
+			  icon: "none", 
+			  duration: 2000
+			})
+		},
+		complete:()=>{
+			uni.hideLoading()
+		}
 	})
 }
 </script>
@@ -150,8 +190,8 @@ const planJump = ()=>{
 						<view v-for="(point,index) in points" class="master-point" @click="handlePointClick(index)" :key="index" :class="{'active-master':index<n}"></view>
 					</view>
 				</view>
-				<view class="plan" @click="planJump">查看调整后的计划</view>
-				<button size="mini" class="confirm">确认</button>
+				<view class="plan" @click="handleSubmit()">查看调整后的计划</view>
+				<button size="mini" class="confirm" @click="handleSubmit">确认</button>
 			</view>
 		</view>
 	</view>

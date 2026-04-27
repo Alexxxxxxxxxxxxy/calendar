@@ -1,18 +1,40 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import user from "../../public/client-o.png"
 import Login from "@/components/Login.vue"
 import { onHide, onShow } from "@dcloudio/uni-app"
 import { useUserContextProvider, useUserContext } from "@/context/userContext.js"
 
+useUserContextProvider()
 
-const { token, UserName, updateName } = useUserContext()
+const { token, UserName } = useUserContext()
 
 const img = ref(null)
 const show = ref(true)
 const status = ref(false)
 const loginshow = ref(false)
-const userinfo = ref(UserName.value || "未登录")
+const userinfo = ref("未登录")
+
+const loadUserInfo = () => {
+	if (token.value) {
+		status.value = true
+		if (UserName.value) {
+			userinfo.value = UserName.value
+		} else {
+			try {
+				const savedName = uni.getStorageSync('NameUser')
+				if (savedName) {
+					userinfo.value = savedName
+				}
+			} catch (e) {
+				console.error('读取用户名失败:', e)
+			}
+		}
+	} else {
+		status.value = false
+		userinfo.value = "未登录"
+	}
+}
 
 watch(UserName, (newVal) => {
 	if (newVal) {
@@ -21,13 +43,12 @@ watch(UserName, (newVal) => {
 	}
 })
 
+watch(token, () => {
+	loadUserInfo()
+})
+
 onShow(() => {
-	if (token.value) {
-		status.value = true
-		if (UserName.value) {
-			userinfo.value = UserName.value
-		}
-	}
+	loadUserInfo()
 })
 
 onHide(() => {
@@ -58,11 +79,15 @@ const handleClick = () => {
 const handleClose = () => {
 	loginshow.value = false;
 }
+const handleSuccess = (val) => {
+	userinfo.value = val
+	status.value = true
+}
 </script>
 
 <template>
 	<view class="form" v-if="loginshow">
-		<Login @close="handleClose"></Login>
+		<Login @close="handleClose" @successLogin="handleSuccess"></Login>
 	</view>
 	<view class="main">
 		<view class="layout">

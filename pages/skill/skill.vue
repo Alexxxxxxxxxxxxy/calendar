@@ -48,6 +48,17 @@ onShow(()=>{
 		}
 	})
 })
+
+const jumpReduce = ()=>{
+	uni.navigateTo({
+		url:"/pages/reduce/reduce"
+	})
+}
+const jumpReorder = () =>{
+	uni.navigateTo({
+		url:"/pages/reorder/reorder"
+	})
+}
 </script>
 
 <template>
@@ -62,8 +73,8 @@ onShow(()=>{
 			</view>
 			
 			<view class="card-container">
-				<SkillCar text="减负卡" :num="incre" color="#667eea"></SkillCar>
-				<SkillCar text="重排卡" :num="replace" color="#f093fb"></SkillCar>
+				<view @click="jumpReduce"><SkillCar text="减负卡" :num="incre" color="#667eea"></SkillCar></view>
+				<view @click="jumpReorder"><SkillCar text="重排卡" :num="replace" color="#f093fb"></SkillCar></view>
 				<SkillCar text="免罚卡" :num="remit" color="#f6d365"></SkillCar>
 			</view>
 		</view>

@@ -6,7 +6,7 @@ const globalContinuousDay = common_vendor.ref(0);
 const globalProgress = common_vendor.ref(0);
 const globalIsVip = common_vendor.ref(false);
 const globalCoins = common_vendor.ref(0);
-const globalName = common_vendor.ref("");
+const globalName = common_vendor.ref(common_vendor.index.getStorageSync("NameUser") || "");
 const useUserContextProvider = () => {
   const updateToken = (tokens) => {
     globalToken.value = tokens;
@@ -26,22 +26,9 @@ const useUserContextProvider = () => {
   };
   const updateName = (val) => {
     globalName.value = val;
+    common_vendor.index.setStorageSync("NameUser", val);
   };
-  common_vendor.provide(UserContextKey, {
-    token: globalToken,
-    updateToken,
-    continuous_day: globalContinuousDay,
-    updateContinuousDay,
-    progress: globalProgress,
-    updateProgress,
-    is_vip: globalIsVip,
-    updateVip,
-    coins: globalCoins,
-    updateCoins,
-    UserName: globalName,
-    updateName
-  });
-  return {
+  const contextValue = {
     token: globalToken,
     updateToken,
     continuous_day: globalContinuousDay,
@@ -55,6 +42,8 @@ const useUserContextProvider = () => {
     UserName: globalName,
     updateName
   };
+  common_vendor.provide(UserContextKey, contextValue);
+  return contextValue;
 };
 const useUserContext = () => {
   const context = common_vendor.inject(UserContextKey);

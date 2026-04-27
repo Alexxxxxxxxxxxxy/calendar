@@ -9,7 +9,7 @@ const globalContinuousDay = ref(0)
 const globalProgress = ref(0)
 const globalIsVip = ref(false)
 const globalCoins = ref(0)
-const globalName = ref("")
+const globalName = ref(uni.getStorageSync('NameUser') || "")
 
 export const useUserContextProvider = () => {
   const updateToken = (tokens) => {
@@ -29,11 +29,12 @@ export const useUserContextProvider = () => {
   const updateCoins = (val) => {
     globalCoins.value = val
   }
-  const updateName = (val)=>{
-	  globalName.value = val
+  const updateName = (val) => {
+    globalName.value = val
+    uni.setStorageSync('NameUser', val)
   }
 
-  provide(UserContextKey, {
+  const contextValue = {
     token: globalToken,
     updateToken,
     continuous_day: globalContinuousDay,
@@ -44,23 +45,12 @@ export const useUserContextProvider = () => {
     updateVip,
     coins: globalCoins,
     updateCoins,
-	UserName:globalName,
-	updateName
-  })
-  return {
-    token: globalToken,
-    updateToken,
-    continuous_day: globalContinuousDay,
-    updateContinuousDay,
-    progress: globalProgress,
-    updateProgress,
-    is_vip: globalIsVip,
-    updateVip,
-    coins: globalCoins,
-    updateCoins,
-	UserName:globalName,
-	updateName
+    UserName: globalName,
+    updateName
   }
+
+  provide(UserContextKey, contextValue)
+  return contextValue
 }
 
 export const useUserContext = () => {

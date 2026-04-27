@@ -11,7 +11,9 @@
     "pages/contract/contract",
     "pages/skill/skill",
     "pages/emotion/emotion",
-    "pages/test/test"
+    "pages/reduce/reduce",
+    "pages/reorder/reorder",
+    "pages/contract_select/contract_select"
   ],
   "window": {
     "navigationBarTextStyle": "black",

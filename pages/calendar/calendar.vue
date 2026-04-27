@@ -4,10 +4,10 @@ import { ref,watch } from 'vue';
 import Progress from "@/components/Progress.vue"
 import NewClass from "@/components/NewClass.vue"
 import Calendar from "@/components/Calendar.vue"
-import {onHide,onLoad} from "@dcloudio/uni-app"
+import {onHide,onShow} from "@dcloudio/uni-app"
 import { useUserContext } from '../../context/userContext';
 
-const {continuous_day, progress} = useUserContext()
+const {continuous_day, progress, token} = useUserContext()
 
 const continuous = ref(continuous_day)
 const ProGress = ref(progress)
@@ -25,8 +25,11 @@ const year = date.getFullYear()
 const month = date.getMonth()+1
 const day = date.getDate()
 
+const mm = month<10?"0"+month:month
+const dd = day<10?"0"+day:day
+
 // 网络请求
-onLoad(() => {
+onShow(() => {
 
   uni.showLoading({
     title: '加载中...',
@@ -38,9 +41,10 @@ onLoad(() => {
     method: 'GET',
     header: {
       "Content-Type": "application/json",
+	  "Authorization": "Bearer " + token.value,
     },
 	data:{
-		date: `${year}/${month}/${day}`
+		date: `${year}-${mm}-${dd}`
 	},
     success: (res) => {
       if (res.statusCode !== 200) {
@@ -51,9 +55,9 @@ onLoad(() => {
         })
         return
       }
-	  study.value = res.data.data.study_duration/60
-	  completeTask.value = res.data.data.completed_tasks
-	  rate.value = res.data.data.completion_rate*100
+	  // study.value = res.data.data.study_duration/60
+	  // completeTask.value = res.data.data.completed_tasks
+	  // rate.value = res.data.data.completion_rate*100
     },
     fail: (err) => {
       uni.showToast({

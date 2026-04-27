@@ -3,9 +3,10 @@ const common_vendor = require("../common/vendor.js");
 const context_userContext = require("../context/userContext.js");
 const _sfc_main = {
   __name: "Login",
-  emits: ["close"],
+  emits: ["close", "successLogin"],
   setup(__props, { emit: __emit }) {
     const emit = __emit;
+    context_userContext.useUserContextProvider();
     const { updateToken, updateVip, updateCoins, updateContinuousDay, token, updateName } = context_userContext.useUserContext();
     const toggle = common_vendor.ref(true);
     const handleClick = () => {
@@ -54,19 +55,20 @@ const _sfc_main = {
             }
             const responseData = ((_a = res.data) == null ? void 0 : _a.data) || res.data;
             const tokenValue = responseData.token || "";
-            updateToken(responseData.token);
+            updateToken(tokenValue);
             updateVip(responseData.is_vip !== void 0 ? responseData.is_vip : false);
             updateCoins(responseData.coins || 0);
             updateContinuousDay(responseData.continuous_days || 0);
             updateName(name.value);
             common_vendor.index.setStorageSync("token", tokenValue);
+            common_vendor.index.setStorageSync("NameUser", name.value);
             common_vendor.index.showToast({
               title: "登录成功！",
               icon: "success",
               duration: 1e3
             });
             setTimeout(() => {
-              common_vendor.index.__f__("log", "at components/Login.vue:84", "准备发送 successLogin 事件");
+              emit("successLogin", name.value);
               name.value = "";
               password.value = "";
               emit("close");
@@ -94,7 +96,7 @@ const _sfc_main = {
             password: password.value
           },
           success: (res) => {
-            common_vendor.index.__f__("log", "at components/Login.vue:113", "注册返回：", res);
+            common_vendor.index.__f__("log", "at components/Login.vue:114", "注册返回：", res);
             if (res.statusCode !== 200) {
               common_vendor.index.showToast({
                 title: `接口异常 ${res.statusCode}`,

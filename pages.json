@@ -67,7 +67,19 @@
 			}
 		},
 		{
-			"path": "pages/test/test",
+			"path": "pages/reduce/reduce",
+			"style": {
+				"navigationBarTitleText": "减负卡"
+			}
+		},
+		{
+			"path": "pages/reorder/reorder",
+			"style": {
+				"navigationBarTitleText": "重排卡"
+			}
+		},
+		{
+			"path": "pages/contract_select/contract_select",
 			"style": {
 				"navigationBarTitleText": ""
 			}

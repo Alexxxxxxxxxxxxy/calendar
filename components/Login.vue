@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useUserContext,useUserContextProvider } from '@/context/userContext.js';
-const emit = defineEmits(['close',]);
-
+const emit = defineEmits(['close',"successLogin"]);
+useUserContextProvider()
 const { updateToken, updateVip, updateCoins, updateContinuousDay, token, updateName } = useUserContext()
 
 const toggle = ref(true)
@@ -64,7 +64,7 @@ const handleSubmit = () => {
 				const tokenValue = responseData.token || ''
 				
 				// 更新上下文
-				updateToken(responseData.token)
+				updateToken(tokenValue)
 				updateVip(responseData.is_vip !== undefined ? responseData.is_vip : false)
 				updateCoins(responseData.coins || 0)
 				updateContinuousDay(responseData.continuous_days || 0)
@@ -72,6 +72,7 @@ const handleSubmit = () => {
 				
 				// 同时存本地
 				uni.setStorageSync('token', tokenValue)
+				uni.setStorageSync("NameUser",name.value)
 				
 				uni.showToast({
 					title: "登录成功！",
@@ -81,7 +82,7 @@ const handleSubmit = () => {
 				
 				// ✅ 优化：延迟关闭，确保状态更新完成 + 用户看到成功提示
 				setTimeout(() => {
-					console.log('准备发送 successLogin 事件')
+					emit("successLogin",name.value)
 					name.value = ""
 					password.value = ""
 					emit("close")

@@ -14,6 +14,9 @@ if (!Math) {
   "./pages/contract/contract.js";
   "./pages/skill/skill.js";
   "./pages/emotion/emotion.js";
+  "./pages/reduce/reduce.js";
+  "./pages/reorder/reorder.js";
+  "./pages/contract_select/contract_select.js";
 }
 const _sfc_main = {
   __name: "App",

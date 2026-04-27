@@ -50,6 +50,16 @@ const _sfc_main = {
         }
       });
     });
+    const jumpReduce = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/reduce/reduce"
+      });
+    };
+    const jumpReorder = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/reorder/reorder"
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: common_vendor.p({
@@ -57,12 +67,14 @@ const _sfc_main = {
           num: incre.value,
           color: "#667eea"
         }),
-        b: common_vendor.p({
+        b: common_vendor.o(jumpReduce),
+        c: common_vendor.p({
           text: "重排卡",
           num: replace.value,
           color: "#f093fb"
         }),
-        c: common_vendor.p({
+        d: common_vendor.o(jumpReorder),
+        e: common_vendor.p({
           text: "免罚卡",
           num: remit.value,
           color: "#f6d365"

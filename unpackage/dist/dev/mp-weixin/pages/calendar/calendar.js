@@ -9,12 +9,12 @@ const Calendar = () => "../../components/Calendar.js";
 const _sfc_main = {
   __name: "calendar",
   setup(__props) {
-    const { continuous_day, progress } = context_userContext.useUserContext();
+    const { continuous_day, progress, token } = context_userContext.useUserContext();
     const continuous = common_vendor.ref(continuous_day);
     common_vendor.ref(progress);
     const show = common_vendor.ref(false);
     const study = common_vendor.ref(0);
-    const completeTask = common_vendor.ref(0);
+    common_vendor.ref(0);
     const rate = common_vendor.ref(0);
     common_vendor.onHide(() => {
       show.value = false;
@@ -23,7 +23,9 @@ const _sfc_main = {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    common_vendor.onLoad(() => {
+    const mm = month < 10 ? "0" + month : month;
+    const dd = day < 10 ? "0" + day : day;
+    common_vendor.onShow(() => {
       common_vendor.index.showLoading({
         title: "加载中...",
         mask: true
@@ -32,10 +34,11 @@ const _sfc_main = {
         url: "http://106.53.182.241:8000/api/calendar/daily",
         method: "GET",
         header: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
         },
         data: {
-          date: `${year}/${month}/${day}`
+          date: `${year}-${mm}-${dd}`
         },
         success: (res) => {
           if (res.statusCode !== 200) {
@@ -46,9 +49,6 @@ const _sfc_main = {
             });
             return;
           }
-          study.value = res.data.data.study_duration / 60;
-          completeTask.value = res.data.data.completed_tasks;
-          rate.value = res.data.data.completion_rate * 100;
         },
         fail: (err) => {
           common_vendor.index.showToast({

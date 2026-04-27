@@ -49,9 +49,8 @@ const _sfc_main = {
         });
         return;
       } else {
-        let result = testTime.value.split(",");
-        common_vendor.index.__f__("log", "at components/NewClass.vue:57", result);
-        if (result.length !== 3 || result[0].length < 4 || result[1].length !== 2 || result[2].length !== 2) {
+        let result = testTime.value;
+        if (result.length !== 10 || result[4] !== "-" || result[7] !== "-") {
           common_vendor.index.showModal({
             title: "错误请求",
             content: "考试时间格式不正确！(YYYY-MM-DD)",
@@ -108,6 +107,30 @@ const _sfc_main = {
           deposit_coins: coins.value,
           plan_type: "string",
           first_day_minutes: 0
+        },
+        success: (res) => {
+          if (res.statusCode !== 200) {
+            common_vendor.index.showToast({
+              title: `接口异常 ${res.statusCode}`,
+              icon: "none",
+              duration: 2e3
+            });
+            return;
+          }
+          common_vendor.index.showToast({
+            title: "计划生成成功！",
+            icon: "success"
+          });
+        },
+        fail: (err) => {
+          common_vendor.index.showToast({
+            title: err.errMsg || "网络请求失败",
+            icon: "none",
+            duration: 2e3
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
         }
       });
       project.value = "";
@@ -133,46 +156,52 @@ const _sfc_main = {
     };
     const emit = __emit;
     const handleX = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/contract_select/contract_select"
+      });
+    };
+    const handleless = () => {
       emit("close", true);
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_vendor.o(handleX),
-        b: project.value,
-        c: common_vendor.o(($event) => project.value = $event.detail.value),
-        d: knowledge.value,
-        e: common_vendor.o(($event) => knowledge.value = $event.detail.value),
-        f: common_vendor.o(handleAdd),
-        g: knowledges.value.length > 0
+        a: common_vendor.o(handleless),
+        b: common_vendor.o(handleX),
+        c: project.value,
+        d: common_vendor.o(($event) => project.value = $event.detail.value),
+        e: knowledge.value,
+        f: common_vendor.o(($event) => knowledge.value = $event.detail.value),
+        g: common_vendor.o(handleAdd),
+        h: knowledges.value.length > 0
       }, knowledges.value.length > 0 ? {
-        h: common_vendor.f(knowledges.value, (kn, index, i0) => {
+        i: common_vendor.f(knowledges.value, (kn, index, i0) => {
           return {
             a: common_vendor.t(kn),
             b: index
           };
         })
       } : {}, {
-        i: testTime.value,
-        j: common_vendor.o(($event) => testTime.value = $event.detail.value),
-        k: targetScore.value,
-        l: common_vendor.o(($event) => targetScore.value = $event.detail.value),
-        m: credit.value,
-        n: common_vendor.o(($event) => credit.value = $event.detail.value),
-        o: common_vendor.f(common_vendor.unref(points), (point, index, i0) => {
+        j: testTime.value,
+        k: common_vendor.o(($event) => testTime.value = $event.detail.value),
+        l: targetScore.value,
+        m: common_vendor.o(($event) => targetScore.value = $event.detail.value),
+        n: credit.value,
+        o: common_vendor.o(($event) => credit.value = $event.detail.value),
+        p: common_vendor.f(common_vendor.unref(points), (point, index, i0) => {
           return {
             a: common_vendor.o(($event) => handlePointClick(index), index),
             b: index,
             c: index < n.value ? 1 : ""
           };
         }),
-        p: common_vendor.f(common_vendor.unref(starts), (start, index, i0) => {
+        q: common_vendor.f(common_vendor.unref(starts), (start, index, i0) => {
           return {
             a: common_vendor.o(($event) => handleStartClick(index), index),
             b: index,
             c: index >= t.value ? common_vendor.unref(common_assets.start_gray) : common_vendor.unref(common_assets.start_yellow)
           };
         }),
-        q: common_vendor.o(handleSubmit)
+        r: common_vendor.o(handleSubmit)
       });
     };
   }

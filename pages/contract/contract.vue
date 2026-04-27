@@ -16,19 +16,19 @@
 			<view class="other">
 				<view class="tag other-tag">📋 其他合约</view>
 				<view class="tab glass-card">
-					<view class="type">合约类型：免费版</view>
-					<view class="time">📅 合约时长:</view>
-					<view class="deposit">💰 押金：X元/X币</view>
+					<view class="type">基础夯实计划</view>
+					<view class="time">📅 介绍:适配一轮复习/基础薄弱/跨考人群</view>
+					<view class="deposit">⭐ 核心目标：全覆盖知识点、搭建知识框架、基础提醒正确率&geq;60%</view>
 				</view>
 				<view class="tab glass-card">
-					<view class="type">合约类型：免费版</view>
-					<view class="time">📅 合约时长:</view>
-					<view class="deposit">💰 押金：X元/X币</view>
+					<view class="type">模块强化计划</view>
+					<view class="time">📅 介绍:</view>
+					<view class="deposit">⭐ 核心目标：定位薄弱点、错题率下降至10%、模考平均成绩&geq;70分</view>
 				</view>
 				<view class="tab glass-card">
-					<view class="type">合约类型：免费版</view>
-					<view class="time">📅 合约时长:</view>
-					<view class="deposit">💰 押金：X元/X币</view>
+					<view class="type">考前冲刺计划</view>
+					<view class="time">📅 介绍:</view>
+					<view class="deposit">⭐ 核心目标：聚集高频考点、易错题复盘、保持题感，高频考点掌握率&geq;70%</view>
 				</view>
 			</view>
 		</view>

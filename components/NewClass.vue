@@ -53,9 +53,8 @@ const handleSubmit = ()=>{
 		return;
 	}
 	else{
-		let result = testTime.value.split(",")
-		console.log(result)
-		if(result.length!==3 || result[0].length<4 || result[1].length!==2 || result[2].length!==2){
+		let result = testTime.value
+		if(result.length!==10 || result[4]!=='-' || result[7]!=='-'){
 			uni.showModal({
 				title: '错误请求',
 				content: '考试时间格式不正确！(YYYY-MM-DD)',
@@ -114,6 +113,28 @@ const handleSubmit = ()=>{
 			deposit_coins:coins.value,
 			plan_type:"string",
 			first_day_minutes:0,
+		},
+		success:(res)=>{
+			if (res.statusCode !== 200) {
+			  uni.showToast({
+			    title: `接口异常 ${res.statusCode}`,
+			    icon: "none", 
+			    duration: 2000
+			  })
+			  return
+			}
+      uni.showToast({
+        title:"计划生成成功！",
+        icon:"success"
+      })
+		},fail:(err)=>{
+			uni.showToast({
+			  title: err.errMsg || "网络请求失败",
+			  icon: "none", 
+			  duration: 2000
+			})
+		},complete:()=>{
+			uni.hideLoading()
 		}
 	})
 	
@@ -142,9 +163,13 @@ const handleAdd = ()=>{
 
 const emit = defineEmits(["close"])
 const handleX = ()=>{
+	uni.navigateTo({
+		url:"/pages/contract_select/contract_select"
+	})
+}
+const handleless = ()=>{
 	emit("close",true)
 }
-
 </script>
 
 <template>
@@ -154,6 +179,11 @@ const handleX = ()=>{
 		
 		<view class="main">
 			<view class="layout glass-card">
+				<!-- 返回按钮 - 左侧 -->
+				<view class="close-btn back-btn" @click="handleless">
+					<text class="close-icon">←</text>
+				</view>
+				<!-- 关闭按钮 - 右侧 -->
 				<view class="close-btn" @click="handleX">
 					<text class="close-icon">✕</text>
 				</view>
@@ -231,15 +261,17 @@ const handleX = ()=>{
 </template>
 
 <style scoped lang="scss">
+// 统一项目全局配色
 $primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 $success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-$glass-bg: rgba(255, 255, 255, 0.95);
-$glass-border: rgba(255, 255, 255, 0.3);
+$glass-bg: rgba(255, 255, 255, 1);
+$glass-border: rgba(102, 126, 234, 0.2);
 $input-border: rgba(102, 126, 234, 0.3);
 $text-primary: #2d3748;
 $text-secondary: #718096;
 $text-light: #a0aec0;
 
+/* 微信小程序适配 - 遮罩层 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -250,11 +282,11 @@ $text-light: #a0aec0;
   justify-content: center;
   align-items: center;
   z-index: 999;
-  padding: 1rem;
+  padding: 30rpx;
   box-sizing: border-box;
 }
 
-/* 微信小程序专用模态框背景 */
+/* 微信小程序专用模态框渐变背景 */
 .modal-bg {
   position: absolute;
   top: 0;
@@ -267,68 +299,69 @@ $text-light: #a0aec0;
 
 .main {
   width: 100%;
-  max-width: 500px;
+  max-width: 750rpx;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 30rpx;
   box-sizing: border-box;
   position: relative;
   z-index: 1;
 }
 
-/* 微信小程序兼容的卡片样式 */
+/* 毛玻璃卡片 - 小程序兼容 */
 .glass-card {
   background: $glass-bg;
   border: 1px solid $glass-border;
-  border-radius: 1.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
+  border-radius: 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.15);
+  padding: 40rpx;
   position: relative;
   box-sizing: border-box;
 }
 
+/* 关闭按钮通用样式 */
 .close-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 2rem;
-  height: 2rem;
+  top: 30rpx;
+  right: 30rpx;
+  width: 60rpx;
+  height: 60rpx;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(102, 126, 234, 0.1);
   border-radius: 50%;
   transition: all 0.3s ease;
   z-index: 10;
   
   &:active {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(102, 126, 234, 0.2);
     transform: scale(0.9);
   }
   
   .close-icon {
-    font-size: 1.2rem;
-    color: $text-secondary;
-    font-weight: 300;
+    font-size: 32rpx;
+    color: #667eea;
+    font-weight: 500;
   }
 }
 
+/* 返回按钮 - 左侧定位 */
+.back-btn {
+  right: auto;
+  left: 30rpx;
+}
+
 .form-title {
-  font-size: 1.5rem;
+  font-size: 40rpx;
   font-weight: 700;
-  color: $text-primary;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  /* 微信小程序兼容：简化渐变文字 */
-  background: $primary-gradient;
-  -webkit-background-clip: text;
-  background-clip: text;
-  /* 兜底颜色 */
   color: #667eea;
+  margin-bottom: 40rpx;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 30rpx;
   
   &:last-child {
     margin-bottom: 0;
@@ -337,19 +370,19 @@ $text-light: #a0aec0;
 
 .form-label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 26rpx;
   font-weight: 600;
   color: $text-primary;
-  margin-bottom: 0.5rem;
+  margin-bottom: 15rpx;
 }
 
 .form-input {
   width: 100%;
-  padding: 0.8rem 1rem;
-  border: 2px solid $input-border;
-  border-radius: 0.8rem;
-  background: rgba(255, 255, 255, 0.9);
-  font-size: 0.95rem;
+  padding: 20rpx 25rpx;
+  border: 2rpx solid $input-border;
+  border-radius: 20rpx;
+  background: #ffffff;
+  font-size: 26rpx;
   color: $text-primary;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -357,7 +390,7 @@ $text-light: #a0aec0;
   &:focus {
     outline: none;
     border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 10rpx rgba(102, 126, 234, 0.1);
   }
   
   &::placeholder {
@@ -367,7 +400,7 @@ $text-light: #a0aec0;
 
 .form-row {
   display: flex;
-  gap: 1rem;
+  gap: 20rpx;
 }
 
 .flex-1 {
@@ -376,31 +409,30 @@ $text-light: #a0aec0;
 
 .input-with-btn {
   display: flex;
-  gap: 0.8rem;
+  gap: 20rpx;
   align-items: center;
 }
 
 .add-btn {
-  width: 3rem;
-  height: 3rem;
+  width: 80rpx;
+  height: 80rpx;
   background: $primary-gradient;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: 20rpx;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
   margin: 0;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10rpx 20rpx rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
   
   &:active {
     transform: scale(0.95);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
   }
   
   .add-icon {
-    font-size: 1.5rem;
+    font-size: 40rpx;
     color: white;
     font-weight: 300;
     line-height: 1;
@@ -410,17 +442,17 @@ $text-light: #a0aec0;
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.8rem;
+  gap: 15rpx;
+  margin-top: 20rpx;
 }
 
 .tag-item {
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-  border: 1px solid rgba(102, 126, 234, 0.25);
-  border-radius: 2rem;
-  font-size: 0.85rem;
-  color: $text-primary;
+  padding: 12rpx 25rpx;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1rpx solid rgba(102, 126, 234, 0.2);
+  border-radius: 50rpx;
+  font-size: 24rpx;
+  color: #667eea;
   font-weight: 500;
 }
 
@@ -428,21 +460,21 @@ $text-light: #a0aec0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 10rpx 0;
 }
 
 .rating-dot {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 70rpx;
+  height: 70rpx;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.08);
-  border: 3px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.05);
+  border: 4rpx solid rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   
   &.active {
     background: $success-gradient;
     border-color: transparent;
-    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.35);
+    box-shadow: 0 10rpx 20rpx rgba(17, 153, 142, 0.2);
   }
   
   &:active {
@@ -451,8 +483,8 @@ $text-light: #a0aec0;
 }
 
 .rating-star {
-  width: 2rem;
-  height: 2rem;
+  width: 50rpx;
+  height: 50rpx;
   transition: all 0.2s ease;
   
   &:active {
@@ -462,20 +494,19 @@ $text-light: #a0aec0;
 
 .submit-btn {
   width: 100%;
-  padding: 1rem;
+  padding: 25rpx;
   background: $primary-gradient;
   border: none;
-  border-radius: 1rem;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+  border-radius: 30rpx;
+  box-shadow: 0 20rpx 30rpx rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
   
   &:active {
     transform: scale(0.98);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.45);
   }
   
   .submit-text {
-    font-size: 1.1rem;
+    font-size: 30rpx;
     font-weight: 600;
     color: white;
   }

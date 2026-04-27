@@ -5,7 +5,7 @@ const context_userContext = require("../../context/userContext.js");
 const _sfc_main = {
   __name: "task",
   setup(__props) {
-    context_userContext.useUserContext();
+    const { token } = context_userContext.useUserContext();
     const t = common_vendor.ref(0);
     const starts = Array.from({ length: 5 }, (_, i) => ({ id: i }));
     const handleStartClick = (index) => {
@@ -56,9 +56,9 @@ const _sfc_main = {
       let ss = s.value < 10 ? "0" + s.value : s.value;
       return `${hh}:${mm}:${ss}`;
     });
-    const subject = common_vendor.ref("");
-    const task = common_vendor.ref("");
-    const taskid = common_vendor.ref("");
+    const subject = common_vendor.ref("科目");
+    const task = common_vendor.ref("任务");
+    const taskid = common_vendor.ref("0");
     common_vendor.onShow(() => {
       common_vendor.index.showLoading({
         title: "加载中...",
@@ -68,7 +68,8 @@ const _sfc_main = {
         url: "http://106.53.182.241:8000/api/task/trial",
         method: "GET",
         header: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
         },
         success: (res) => {
           if (res.statusCode !== 200) {
@@ -79,9 +80,6 @@ const _sfc_main = {
             });
             return;
           }
-          subject.value = res.data.data.subject_name;
-          task.value = res.data.data.sub_knowledge;
-          taskid.value = res.data.data.task_id;
         },
         fail: (err) => {
           common_vendor.index.showToast({
@@ -95,9 +93,47 @@ const _sfc_main = {
         }
       });
     });
-    const planJump = () => {
-      common_vendor.index.navigateTo({
-        url: "/pages/plan/plan"
+    const handleSubmit = () => {
+      common_vendor.index.showLoading({
+        title: "加载中...",
+        mask: true
+      });
+      common_vendor.index.request({
+        url: "http://106.53.182.241:8000/api/task/trial_feedback",
+        method: "POST",
+        header: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token.value
+        },
+        data: {
+          task_id: taskid.value,
+          elapsed_seconds: s.value + m.value * 60 + h.value * 60 * 60,
+          completion_stars: t.value,
+          status_assessment: "" + n.value
+        },
+        success: (res) => {
+          if (res.statusCode !== 200) {
+            common_vendor.index.showToast({
+              title: `接口异常 ${res.statusCode}`,
+              icon: "none",
+              duration: 2e3
+            });
+            return;
+          }
+          common_vendor.index.navigateTo({
+            url: "/pages/plan/plan"
+          });
+        },
+        fail: (err) => {
+          common_vendor.index.showToast({
+            title: err.errMsg || "网络请求失败",
+            icon: "none",
+            duration: 2e3
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
+        }
       });
     };
     return (_ctx, _cache) => {
@@ -121,7 +157,8 @@ const _sfc_main = {
             c: index < n.value ? 1 : ""
           };
         }),
-        h: common_vendor.o(planJump)
+        h: common_vendor.o(($event) => handleSubmit()),
+        i: common_vendor.o(handleSubmit)
       };
     };
   }
